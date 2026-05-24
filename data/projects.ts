@@ -1,0 +1,252 @@
+export type ProjectCategory = 'Research' | 'First-Principles' | 'Freelance' | 'Personal' | 'LLM/NLP' | 'Computer Vision' | 'Deep Learning';
+
+export interface Project {
+  id: string;
+  title: string;
+  description: string;
+  techStack: string[];
+  categories: ProjectCategory[];
+  githubLink: string;
+  liveDemoLink?: string;
+  videoEmbedUrl?: string;
+  thumbnailUrl?: string;
+  metrics?: { label: string; value: string }[];
+  featured?: boolean;
+}
+
+export const projects: Project[] = [
+  {
+    id: 'rlhf-pipeline',
+    title: 'Reinforcement Learning from Human Feedback Pipeline',
+    description: 'Implemented a complete 3-stage RLHF pipeline (SFT, RM, PPO) to align a GPT-2 model. Supervised Fine-Tuning achieved a 202% ROUGE-2 increase over baseline. The Reward Model, trained on 33k preference pairs, achieved 97.9% accuracy. Proximal Policy Optimization (PPO) resulted in a 54% preference score lift compared to the SFT-only model. Conducted comparative analysis of full-parameter versus PEFT (QLoRA) tuning methods.',
+    techStack: ['RLHF', 'PPO', 'Reward Modeling', 'SFT', 'LLMs', 'Python', 'PyTorch', 'TRL', 'QLoRA'],
+    categories: ['Research', 'LLM/NLP', 'Deep Learning'],
+    githubLink: 'https://github.com/nabeelshan78/reinforcement-learning-human-feedback-scratch',
+    liveDemoLink: 'https://huggingface.co/spaces/nabeelshan/Rlhf-Gpt2-Demo',
+    metrics: [
+      { label: 'ROUGE-2 Δ', value: '+202%' },
+      { label: 'RM Acc', value: '97.9%' },
+      { label: 'PPO Δ', value: '+54%' },
+    ],
+    featured: true,
+  },
+  {
+    id: 'rag-pipeline',
+    title: 'Multi-Stage Routing RAG Architecture',
+    description: 'Developed a Retrieval-Augmented Generation system featuring an intelligent multi-stage routing mechanism for intent classification. The architecture routes queries between technical and FAQ pathways, reducing inference token consumption by 40%. Achieved <2s latency and >95% routing accuracy. Observability integrated via Arize Phoenix and OpenTelemetry over a Weaviate vector database (44,000+ embeddings).',
+    techStack: ['RAG', 'LLMs', 'MLOps', 'Arize Phoenix', 'OpenTelemetry', 'Weaviate', 'Python', 'Llama 3.1'],
+    categories: ['Research', 'LLM/NLP', 'Personal'],
+    githubLink: 'https://github.com/nabeelshan78/fashion-advanced-rag-pipeline-phoenix',
+    metrics: [
+      { label: 'Token Reduction', value: '40%' },
+      { label: 'Latency', value: '<2s' },
+      { label: 'Routing Acc', value: '>95%' },
+    ],
+    featured: true,
+  },
+  {
+    id: 'llm-finetuning',
+    title: 'LLM Adaptation Techniques: ICL, SFT, PEFT, RLHF',
+    description: 'Comparative study of adaptation methods utilizing FLAN-T5 for abstractive summarization. Benchmarked In-Context Learning, full Supervised Fine-Tuning (247.5M params), and PEFT (LoRA). LoRA achieved 97% of full SFT performance utilizing only 1.4% of trainable parameters. RLHF via PPO and a RoBERTa reward model decreased toxicity metrics by 9.2%.',
+    techStack: ['LLMs', 'RLHF', 'SFT', 'LoRA', 'PPO', 'Python', 'PyTorch', 'Hugging Face', 'FLAN-T5'],
+    categories: ['Research', 'LLM/NLP', 'Deep Learning'],
+    githubLink: 'https://github.com/nabeelshan78/flanT5-ICL-SFT-PEFT-RLHF',
+    liveDemoLink: 'https://flant5-icl-sft-peft-rlhf-8rx4znwnt8g9yjctbawwve.streamlit.app/',
+    videoEmbedUrl: 'https://www.youtube.com/embed/xroNqa6lkn8?autoplay=1&mute=1&loop=1&playlist=xroNqa6lkn8',
+    metrics: [
+      { label: 'ROUGE Δ', value: '+18.86%' },
+      { label: 'Params Tuned', value: '1.4%' },
+      { label: 'Toxicity Δ', value: '-9.2%' },
+    ],
+    featured: true,
+  },
+  {
+    id: 'transformer-classifier',
+    title: 'Transformer Encoder vs. DistilBERT Fine-Tuning',
+    description: 'Empirical comparison of text classification efficacy using a first-principles PyTorch Transformer Encoder (90.32% accuracy) against a fine-tuned DistilBERT model (94.79% accuracy). Evaluated on standard benchmark datasets.',
+    techStack: ['Python', 'PyTorch', 'Transformer', 'DistilBERT', 'Transfer Learning'],
+    categories: ['First-Principles', 'LLM/NLP', 'Deep Learning'],
+    githubLink: 'https://github.com/nabeelshan78/Transformer-AGNews-Classifier',
+    thumbnailUrl: 'distilbert.gif',
+    liveDemoLink: 'https://huggingface.co/spaces/nabeelshan/distilbert-agnews-classifier',
+    metrics: [
+      { label: 'Custom Acc', value: '90.32%' },
+      { label: 'DistilBERT Acc', value: '94.79%' },
+    ],
+  },
+  {
+    id: 'gpt-forge',
+    title: 'Autoregressive Transformer Architecture',
+    description: 'Implementation of a GPT decoder-only architecture utilizing PyTorch. Features multi-head causal self-attention, positional embeddings, custom tokenization, and a bespoke training loop. Models (22M and 52M parameters) were trained and evaluated on NVIDIA A10G infrastructure.',
+    techStack: ['PyTorch', 'Python', 'Transformer', 'Causal Attention', 'Autoregressive Inference'],
+    categories: ['First-Principles', 'LLM/NLP', 'Deep Learning'],
+    githubLink: 'https://github.com/nabeelshan78/gpt-forge-from-scratch-transformer',
+    metrics: [
+      { label: 'Parameters', value: '52M' },
+    ],
+    featured: true,
+  },
+  {
+    id: 'peft-playbook',
+    title: 'Parameter-Efficient Fine-Tuning Mechanisms',
+    description: 'Implementation and comparative analysis of Adapters and LoRA from scratch in PyTorch. Results demonstrated that PEFT approaches match full fine-tuning accuracy (~86%) while reducing tunable parameters by >96% across BERT, GPT-2, and OPT architectures.',
+    techStack: ['Python', 'PyTorch', 'PEFT', 'Adapters', 'LoRA'],
+    categories: ['First-Principles', 'Research', 'LLM/NLP'],
+    githubLink: 'https://github.com/nabeelshan78/Transformer-Adaptation-Playbook',
+    metrics: [
+      { label: 'PEFT Acc', value: '~86%' },
+      { label: 'Param Reduction', value: '>96%' },
+    ],
+  },
+  {
+    id: 'nmt-attention',
+    title: 'Attention-Based Neural Machine Translation',
+    description: 'Seq2Seq architecture for NMT (English to French) implemented in TensorFlow. Utilizes a Bi-directional LSTM encoder, an LSTM decoder with Additive Attention, and Beam Search decoding yielding a 23.6M parameter model.',
+    techStack: ['Python', 'TensorFlow', 'Seq2Seq', 'Additive Attention', 'Bi-LSTM', 'Beam Search'],
+    categories: ['First-Principles', 'LLM/NLP', 'Deep Learning'],
+    githubLink: 'https://github.com/nabeelshan78/attention-based-nmt',
+    thumbnailUrl: 'Neural MT.jpg',
+    liveDemoLink: 'https://attention-based-nmt-rwlnsz6dvpdacpyj4gqob2.streamlit.app/',
+    videoEmbedUrl: 'https://www.youtube.com/embed/O6M507Ku6qU?autoplay=1&mute=1&loop=1&playlist=O6M507Ku6qU',
+    metrics: [
+      { label: 'Parameters', value: '23.6M' },
+    ],
+  },
+  {
+    id: 'yolov2-detection',
+    title: 'YOLOv2 Object Detection Pipeline',
+    description: 'Object detection pipeline based on YOLOv2 architecture in TensorFlow. Incorporates custom tensor decoding, bounding box regression, and Non-Maximum Suppression (NMS) algorithms.',
+    techStack: ['Python', 'TensorFlow', 'Computer Vision', 'YOLO', 'NMS'],
+    categories: ['First-Principles', 'Computer Vision', 'Deep Learning'],
+    githubLink: 'https://github.com/nabeelshan78/yolo-object-detection-pipeline',
+    thumbnailUrl: 'cars_pred.png',
+  },
+  {
+    id: 'wake-word',
+    title: 'Real-Time Wake Word Detection',
+    description: 'Audio signal processing and classification system utilizing Conv1D and Stacked GRU architectures. Trained on synthesized datasets with robust data augmentation for noisy environments.',
+    techStack: ['Python', 'TensorFlow', 'Audio Processing', 'GRU', 'Conv1D'],
+    categories: ['First-Principles', 'Deep Learning', 'Personal'],
+    githubLink: 'https://github.com/nabeelshan78/keyword-spotting-engine',
+    thumbnailUrl: 'wake.png',
+    liveDemoLink: 'https://keyword-spotting-engine-dlydrlpjcyssh7yyjzemqd.streamlit.app/',
+    videoEmbedUrl: 'https://www.youtube.com/embed/l8yH4MuLMvM?autoplay=1&mute=1&loop=1&playlist=l8yH4MuLMvM',
+  },
+  {
+    id: 'facenet',
+    title: 'FaceNet Biometric Verification',
+    description: 'Facial recognition system utilizing FaceNet. Implements L2 distance calculations on 128D embedding vectors for verification and threshold-based identification against a reference database.',
+    techStack: ['Python', 'TensorFlow', 'Computer Vision', 'FaceNet', 'Biometrics'],
+    categories: ['Computer Vision', 'Deep Learning', 'Personal'],
+    githubLink: 'https://github.com/nabeelshan78/facenet-face-recognition',
+    thumbnailUrl: 'face.png',
+    videoEmbedUrl: 'https://www.youtube.com/embed/thC_cF0a7mQ?autoplay=1&mute=1&loop=1&playlist=thC_cF0a7mQ',
+  },
+  {
+    id: 'unet-segmentation',
+    title: 'U-Net Semantic Segmentation',
+    description: 'Semantic segmentation architecture implemented from scratch in TensorFlow. Evaluated on CARLA simulator data for pixel-level road classification, achieving 0.908 Mean IoU.',
+    techStack: ['Python', 'TensorFlow', 'Computer Vision', 'U-Net', 'Semantic Segmentation'],
+    categories: ['First-Principles', 'Computer Vision', 'Deep Learning'],
+    githubLink: 'https://github.com/nabeelshan78/pixelsense-ai-segmentation',
+    thumbnailUrl: 'carla_road_seg.png',
+    liveDemoLink: 'https://pixelsense-ai-segmentation-n9srxvnie8tcsusmr2eq3x.streamlit.app/',
+    videoEmbedUrl: 'https://www.youtube.com/embed/4Flr944fW50?autoplay=1&mute=1&loop=1&playlist=4Flr944fW50',
+    metrics: [
+      { label: 'Val mIoU', value: '0.908' },
+      { label: 'Val Acc', value: '98.37%' },
+    ],
+  },
+  {
+    id: 'debiasing-embeddings',
+    title: 'GloVe Embedding Debiasing Algorithms',
+    description: 'Implementation of neutralization and equalization algorithms to mitigate gender bias in GloVe vector spaces. Includes quantitative bias detection and fairness evaluation metrics.',
+    techStack: ['Python', 'NumPy', 'NLP', 'Word Embeddings', 'GloVe', 'Fairness'],
+    categories: ['Research', 'LLM/NLP'],
+    githubLink: 'https://github.com/nabeelshan78/debiasing-word-embeddings',
+    thumbnailUrl: 'debias.png',
+  },
+  {
+    id: 'resnet50',
+    title: 'ResNet-50 Implementation',
+    description: 'Reconstruction of the ResNet-50 architecture in TensorFlow without utilizing pre-trained weights. Implements convolutional and identity blocks to evaluate residual learning on CIFAR-10.',
+    techStack: ['Python', 'TensorFlow', 'Computer Vision', 'CNN', 'ResNet'],
+    categories: ['First-Principles', 'Computer Vision', 'Deep Learning'],
+    githubLink: 'https://github.com/nabeelshan78/resnet50-from-scratch-cifar10',
+    thumbnailUrl: 'resnet.png',
+  },
+  {
+    id: 'emojify',
+    title: 'Text-to-Emoji Classification',
+    description: 'Comparative analysis of emoji prediction using a baseline GloVe + Softmax model (NumPy) versus an LSTM architecture utilizing pre-trained GloVe embeddings (TensorFlow).',
+    techStack: ['Python', 'TensorFlow', 'NumPy', 'NLP', 'GloVe', 'LSTM'],
+    categories: ['LLM/NLP', 'Deep Learning', 'Personal'],
+    githubLink: 'https://github.com/nabeelshan78/emojify-nlp',
+    thumbnailUrl: 'emoji.png',
+  },
+  {
+    id: 'date-translator',
+    title: 'Date Format Translation via Attention',
+    description: 'Seq2Seq model translating varied natural language dates into normalized YYYY-MM-DD formats. Architecture pairs a Bi-directional LSTM encoder with an attention-augmented LSTM decoder.',
+    techStack: ['Python', 'TensorFlow', 'NLP', 'Seq2Seq', 'Attention Mechanism'],
+    categories: ['First-Principles', 'LLM/NLP'],
+    githubLink: 'https://github.com/nabeelshan78/attention-date-translator',
+    thumbnailUrl: 'atten_date.png',
+  },
+  {
+    id: 'cnn-scratch',
+    title: 'CNN Architecture in NumPy',
+    description: 'Implementation of Convolutional Neural Networks utilizing only NumPy primitives. Includes mathematical derivations for 2D Convolutions, Max Pooling, and full backpropagation algorithms.',
+    techStack: ['Python', 'NumPy', 'CNNs', 'Computer Vision', 'Backpropagation'],
+    categories: ['First-Principles', 'Computer Vision', 'Deep Learning'],
+    githubLink: 'https://github.com/nabeelshan78/cnn-from-scratch-sign-digits',
+    thumbnailUrl: 'Convolution_schematic.gif',
+  },
+  {
+    id: 'neural-style-transfer',
+    title: 'Neural Style Transfer Optimization',
+    description: 'NST pipeline utilizing VGG19 feature extraction. Implements custom content and style loss formulations using tf.GradientTape for gradient descent optimization directly on image pixels.',
+    techStack: ['Python', 'TensorFlow', 'Computer Vision', 'NST', 'VGG19'],
+    categories: ['Computer Vision', 'Deep Learning', 'Personal'],
+    githubLink: 'https://github.com/nabeelshan78/neural-style-transfer-tf',
+    thumbnailUrl: 'style.png',
+  },
+  {
+    id: 'mobilenetv2',
+    title: 'MobileNetV2 Transfer Learning',
+    description: 'Evaluation of transfer learning efficacy for binary image classification. Includes feature extraction, fine-tuning methodologies, and data augmentation pipelines.',
+    techStack: ['Python', 'TensorFlow', 'Computer Vision', 'Transfer Learning', 'MobileNetV2'],
+    categories: ['Computer Vision', 'Deep Learning'],
+    githubLink: 'https://github.com/nabeelshan78/mobilenetv2-finetune-classification',
+    thumbnailUrl: 'alpaca.png',
+  },
+  {
+    id: 'dnn-scratch',
+    title: 'Deep Neural Network in NumPy',
+    description: 'Modular implementation of fully-connected deep neural networks. Includes forward/backward propagation routines, diverse optimizers (Adam, RMSProp), initialization schemas, and regularization.',
+    techStack: ['Python', 'NumPy', 'Neural Networks', 'Optimization'],
+    categories: ['First-Principles', 'Deep Learning'],
+    githubLink: 'https://github.com/nabeelshan78/deep-nn-from-scratch',
+    thumbnailUrl: 'deep_nn.jpg',
+  },
+  {
+    id: 'dino-rnn',
+    title: 'Character-Level RNN Generation',
+    description: 'Recurrent Neural Network constructed in NumPy. Implements Backpropagation Through Time (BPTT), gradient clipping, and temperature scaling for generative inference.',
+    techStack: ['Python', 'NumPy', 'RNN', 'Generative Models', 'BPTT'],
+    categories: ['First-Principles', 'LLM/NLP'],
+    githubLink: 'https://github.com/nabeelshan78/char-rnn-dino-name-generator',
+    thumbnailUrl: 'dino_2.png',
+  },
+  {
+    id: 'vanilla-rnn',
+    title: 'Vanilla RNN Architecture',
+    description: 'Fundamental Recurrent Neural Network implementation using NumPy matrices. Demonstrates sequential data processing, cross-entropy loss calculation, and BPTT.',
+    techStack: ['Python', 'NumPy', 'RNN', 'NLP', 'BPTT'],
+    categories: ['First-Principles', 'LLM/NLP', 'Deep Learning'],
+    githubLink: 'https://github.com/nabeelshan78/vanilla-rnn-from-scratch',
+    thumbnailUrl: 'rnn_image.png',
+  },
+];
+
+export const allCategories: ProjectCategory[] = ['Research', 'First-Principles', 'LLM/NLP', 'Computer Vision', 'Deep Learning', 'Personal', 'Freelance'];

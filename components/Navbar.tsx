@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 
 const navItems = [
   { id: 'hero', label: 'Home' },
@@ -16,6 +17,8 @@ const Navbar = () => {
   const [activeSection, setActiveSection] = useState('hero');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const savedTheme = localStorage.getItem('theme') as 'light' | 'dark' | null;
@@ -61,6 +64,12 @@ const Navbar = () => {
 
   const scrollToSection = (id: string) => {
     setMobileMenuOpen(false);
+
+    if (location.pathname !== '/') {
+      navigate(`/#${id}`);
+      return;
+    }
+
     const element = document.getElementById(id);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
@@ -90,6 +99,7 @@ const Navbar = () => {
               {label}
             </button>
           ))}
+          <Link to="/blog" className="nav-link">Blog</Link>
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
@@ -174,6 +184,18 @@ const Navbar = () => {
                   {label}
                 </button>
               ))}
+              <Link
+                to="/blog"
+                className="nav-link"
+                style={{
+                  textAlign: 'left',
+                  padding: '0.75rem 0',
+                  borderBottom: '1px solid var(--border-subtle)',
+                  fontSize: 'var(--text-sm)',
+                }}
+              >
+                Blog
+              </Link>
             </div>
           </motion.div>
         )}

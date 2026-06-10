@@ -1,0 +1,231 @@
+export const meta = {
+  title: "Direct Preference Optimization: Why I Stopped Training Reward Models",
+  date: "2025-05-15",
+  description: "A first-principles comparison of DPO and RLHF — the math behind eliminating reward models from the alignment pipeline, with implementation details.",
+  tags: ["LLM Alignment", "DPO", "RLHF", "Optimization"],
+  readTime: "12 min read"
+};
+
+# Direct Preference Optimization: Why I Stopped Training Reward Models
+
+After spending weeks debugging reward model collapse and wrestling with PPO hyperparameters for an alignment project, I came across Rafailov et al.'s DPO paper — and the elegance of its core insight fundamentally changed how I think about preference-based optimization. This post is a first-principles walkthrough of why DPO works, how it mathematically eliminates the reward model, and when you might still want RLHF anyway.
+
+![Comparison of RLHF and DPO training pipelines](/SFT_PEFT_RLHF.gif)
+<Caption>Figure 1: The standard RLHF pipeline involves supervised fine-tuning, reward model training, and PPO — DPO collapses the last two stages into a single optimization step.</Caption>
+
+## The RLHF Pipeline: Powerful but Fragile
+
+Reinforcement Learning from Human Feedback has been the dominant paradigm for aligning language models since InstructGPT. The pipeline consists of three distinct phases:
+
+1. **Supervised Fine-Tuning (SFT):** Train a base model $\pi_{\text{SFT}}$ on high-quality demonstration data.
+2. **Reward Model Training:** Collect pairwise human preferences $(y_w \succ y_l \mid x)$ and train a reward model $r_\phi(x, y)$ to predict which completions humans prefer.
+3. **RL Fine-Tuning:** Optimize the policy $\pi_\theta$ against $r_\phi$ using PPO, with a KL divergence penalty to prevent the policy from deviating too far from $\pi_{\text{SFT}}$.
+
+<Mermaid chart={`
+graph LR
+    subgraph RLHF["RLHF Pipeline (3 stages)"]
+        direction LR
+        A["Preference<br/>Data"] --> B["Train Reward<br/>Model r_φ"]
+        B --> C["PPO with<br/>KL Penalty"]
+        C --> D["Aligned<br/>Policy π_θ"]
+    end
+    subgraph DPO["DPO Pipeline (1 stage)"]
+        direction LR
+        E["Preference<br/>Data"] --> F["Direct Policy<br/>Optimization"]
+        F --> G["Aligned<br/>Policy π_θ"]
+    end
+    style RLHF fill:#1a1a2e,stroke:#e94560,color:#eee
+    style DPO fill:#1a1a2e,stroke:#0f3460,color:#eee
+`} />
+
+The RLHF objective in stage 3 is:
+
+$$\max_{\pi_\theta} \; \mathbb{E}_{x \sim \mathcal{D}, \, y \sim \pi_\theta(y|x)} \Big[ r_\phi(x, y) \Big] - \beta \, D_{\text{KL}} \Big[ \pi_\theta(y|x) \;\|\; \pi_{\text{ref}}(y|x) \Big]$$
+
+where $\pi_{\text{ref}}$ is typically the SFT model and $\beta$ controls how strongly we penalize deviation from it. This objective has an elegant interpretation: maximize reward while staying close to the reference policy. But in practice, optimizing it is a nightmare.
+
+### Why RLHF Is Hard to Get Right
+
+Anyone who has actually trained an RLHF pipeline end-to-end knows the pain points:
+
+**Reward hacking.** The policy learns to exploit quirks of the reward model rather than genuinely improving. I have seen models produce repetitive, sycophantic outputs that score highly on the reward model but are clearly worse by human judgment. The reward model is a learned proxy, and Goodhart's Law applies with full force: *when a measure becomes a target, it ceases to be a good measure*.
+
+**PPO instability.** PPO requires careful tuning of the clipping parameter $\epsilon$, the learning rate, the number of epochs per batch, the GAE $\lambda$, the value function coefficient — the list goes on. The interplay between these hyperparameters is non-trivial, and small changes can lead to training collapse or reward hacking.
+
+**Infrastructure complexity.** You need to maintain four models in memory simultaneously during PPO training: the policy $\pi_\theta$, the reference policy $\pi_{\text{ref}}$, the reward model $r_\phi$, and the value function $V_\psi$. For 7B+ parameter models, this is a serious engineering constraint.
+
+<Callout type="warning">
+A common failure mode in RLHF: the reward model assigns high scores to degenerate outputs (e.g., excessively long responses, repetitive praise). Without careful monitoring and reward model evaluation, the policy can converge to these degenerate modes within a few hundred PPO steps. This is not a theoretical concern — it happened repeatedly in my experiments with LLaMA-2 7B.
+</Callout>
+
+## The Bradley-Terry Preference Model
+
+Both RLHF and DPO start from the same assumption about how human preferences are generated. Given a prompt $x$ and two completions $y_w$ (preferred) and $y_l$ (dispreferred), the Bradley-Terry model posits:
+
+$$p^*(y_w \succ y_l \mid x) = \sigma\big(r^*(x, y_w) - r^*(x, y_l)\big)$$
+
+where $\sigma$ is the logistic sigmoid and $r^*(x, y)$ is the latent "true" reward function that captures human preferences. This is a strong assumption — it implies preferences are transitive and determined entirely by a scalar reward difference — but it is the standard starting point and works well empirically.
+
+The reward model $r_\phi$ is trained by maximum likelihood on the preference dataset $\mathcal{D} = \{(x^{(i)}, y_w^{(i)}, y_l^{(i)})\}_{i=1}^{N}$:
+
+$$\mathcal{L}_{\text{RM}}(\phi) = -\mathbb{E}_{(x, y_w, y_l) \sim \mathcal{D}} \Big[ \log \sigma\big(r_\phi(x, y_w) - r_\phi(x, y_l)\big) \Big]$$
+
+This is standard logistic regression on pairwise comparisons. Nothing controversial here. The question is: do we actually *need* $r_\phi$ as a separate artifact?
+
+## The DPO Derivation: Eliminating the Reward Model
+
+This is where the paper gets beautiful. The key insight of Rafailov et al. (2023) is that the constrained RL objective has a closed-form optimal solution, and we can reparameterize the reward in terms of the optimal policy itself.
+
+### Step 1: The Optimal Policy Under KL Constraints
+
+Consider the KL-constrained reward maximization objective:
+
+$$\max_{\pi} \; \mathbb{E}_{x \sim \mathcal{D}, \, y \sim \pi} \Big[ r(x, y) \Big] - \beta \, D_{\text{KL}} \Big[ \pi(y|x) \;\|\; \pi_{\text{ref}}(y|x) \Big]$$
+
+This is a constrained optimization problem over distributions. By writing out the KL divergence and applying variational calculus (or simply recognizing the form of the optimal Gibbs distribution), the optimal policy $\pi^*$ has the closed-form solution:
+
+$$\pi^*(y \mid x) = \frac{1}{Z(x)} \, \pi_{\text{ref}}(y \mid x) \, \exp\!\Big(\frac{1}{\beta} \, r(x, y)\Big)$$
+
+where $Z(x) = \sum_{y} \pi_{\text{ref}}(y|x) \exp\!\big(\frac{1}{\beta} r(x,y)\big)$ is the partition function. This result is a direct consequence of the fact that the KL-regularized objective is a convex optimization problem over the simplex of distributions, and the optimizer takes the form of an energy-based model.
+
+### Step 2: Reparameterizing the Reward
+
+Now comes the critical move. We can solve the above equation for $r(x, y)$:
+
+$$r(x, y) = \beta \log \frac{\pi^*(y \mid x)}{\pi_{\text{ref}}(y \mid x)} + \beta \log Z(x)$$
+
+This is the **implicit reward**: the reward is completely determined by the log-ratio of the optimal policy and the reference policy, up to a prompt-dependent constant $\beta \log Z(x)$.
+
+### Step 3: Substituting into Bradley-Terry
+
+When we substitute this implicit reward into the Bradley-Terry model, the partition function $Z(x)$ cancels (since it depends only on $x$, not on $y$):
+
+$$p^*(y_w \succ y_l \mid x) = \sigma\!\left(\beta \log \frac{\pi^*(y_w \mid x)}{\pi_{\text{ref}}(y_w \mid x)} - \beta \log \frac{\pi^*(y_l \mid x)}{\pi_{\text{ref}}(y_l \mid x)}\right)$$
+
+This is remarkable. The preference probability is expressed entirely in terms of the policy $\pi^*$ and the reference $\pi_{\text{ref}}$ — no reward model appears anywhere. The partition function, which is intractable to compute, drops out entirely.
+
+### The DPO Loss
+
+We can now write the maximum likelihood objective directly in terms of the policy parameters $\theta$:
+
+$$\mathcal{L}_{\text{DPO}}(\theta) = -\mathbb{E}_{(x, y_w, y_l) \sim \mathcal{D}} \left[ \log \sigma\!\left(\beta \log \frac{\pi_\theta(y_w \mid x)}{\pi_{\text{ref}}(y_w \mid x)} - \beta \log \frac{\pi_\theta(y_l \mid x)}{\pi_{\text{ref}}(y_l \mid x)}\right) \right]$$
+
+This is the entire DPO algorithm. No reward model training, no PPO, no value function, no GAE, no clipping. Just supervised learning on preference pairs with a carefully derived loss function.
+
+<Callout type="tip">
+The DPO loss has an intuitive interpretation: it increases the relative log-probability of the preferred completion $y_w$ over the dispreferred completion $y_l$, scaled by the inverse temperature $\beta$. The reference policy $\pi_{\text{ref}}$ acts as an implicit KL anchor — the model is penalized for deviating from it because the log-ratios appear inside the sigmoid. Larger $\beta$ means stronger regularization toward the reference.
+</Callout>
+
+### The Implicit Reward
+
+After DPO training, even though we never trained a reward model, we can extract one. The implicit reward under the trained policy $\pi_\theta$ is:
+
+$$\hat{r}(x, y) = \beta \log \frac{\pi_\theta(y \mid x)}{\pi_{\text{ref}}(y \mid x)}$$
+
+(up to the intractable constant $\beta \log Z(x)$, which cancels in all preference comparisons). This is useful for analysis — you can inspect the implicit reward landscape to understand what the model has learned to prefer.
+
+## Implementation: DPO in PyTorch
+
+Here is a realistic DPO loss computation. The key implementation detail is that you need to compute log-probabilities for both the policy and the reference model on both the chosen and rejected completions:
+
+```python
+import torch
+import torch.nn.functional as F
+
+def dpo_loss(
+    policy_chosen_logps: torch.Tensor,    # log π_θ(y_w | x)
+    policy_rejected_logps: torch.Tensor,  # log π_θ(y_l | x)
+    ref_chosen_logps: torch.Tensor,       # log π_ref(y_w | x)
+    ref_rejected_logps: torch.Tensor,     # log π_ref(y_l | x)
+    beta: float = 0.1,
+) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+    """Compute DPO loss (Rafailov et al., 2023)."""
+    # Log-ratios: log [π_θ(y|x) / π_ref(y|x)]
+    chosen_logratios = policy_chosen_logps - ref_chosen_logps
+    rejected_logratios = policy_rejected_logps - ref_rejected_logps
+
+    # Implicit rewards
+    chosen_rewards = beta * chosen_logratios
+    rejected_rewards = beta * rejected_logratios
+
+    # DPO loss: -log σ(β * (log π_θ(yw|x)/π_ref(yw|x) - log π_θ(yl|x)/π_ref(yl|x)))
+    logits = chosen_rewards - rejected_rewards
+    loss = -F.logsigmoid(logits).mean()
+
+    # Return loss and implicit rewards for logging
+    return loss, chosen_rewards.detach(), rejected_rewards.detach()
+
+
+def compute_sequence_logps(model, input_ids, attention_mask, labels):
+    """Compute per-sequence log-probabilities from a causal LM."""
+    with torch.no_grad() if not model.training else torch.enable_grad():
+        outputs = model(input_ids=input_ids, attention_mask=attention_mask)
+        logits = outputs.logits[:, :-1, :]  # shift for next-token prediction
+        target = labels[:, 1:]
+
+        per_token_logps = torch.gather(
+            F.log_softmax(logits, dim=-1), 2, target.unsqueeze(-1)
+        ).squeeze(-1)
+
+        # Mask padding tokens, sum over sequence length
+        mask = (target != -100).float()
+        return (per_token_logps * mask).sum(dim=-1)
+```
+
+The simplicity here is not a toy example — this is essentially the core of TRL's `DPOTrainer`. The entire alignment signal flows through log-probability ratios. Compare this to the infrastructure needed for PPO: advantage estimation, value function updates, rollout buffers, clipped surrogate objectives, entropy bonuses.
+
+## Practical Differences That Matter
+
+### Memory and Compute
+
+RLHF with PPO requires four models in memory: $\pi_\theta$, $\pi_{\text{ref}}$, $r_\phi$, and $V_\psi$. With DPO, you need exactly two: $\pi_\theta$ and $\pi_{\text{ref}}$. For a 7B model in bf16, this difference is roughly 28 GB of VRAM — the difference between needing 4×A100-80GB and 2×A100-80GB. In practice, $\pi_{\text{ref}}$ can be offloaded to CPU or computed in chunks since it only provides reference log-probabilities and requires no gradient computation.
+
+### Hyperparameter Sensitivity
+
+PPO has on the order of 8-12 critical hyperparameters. DPO has essentially one: $\beta$. In my experiments, $\beta \in [0.05, 0.5]$ covers the useful range, with $\beta = 0.1$ being a reasonable default. The learning rate matters (as with any optimization), but the landscape is far more forgiving than PPO's.
+
+### Data Efficiency
+
+DPO operates on a fixed, offline preference dataset. This is both a strength and a limitation. The strength: you do not need online rollouts, which are expensive and introduce non-stationarity. The limitation: the policy is only optimized over the support of the preference data. If the preference dataset does not cover important parts of the input distribution, DPO cannot learn about them.
+
+RLHF with PPO, by contrast, generates on-policy rollouts during training. This means the reward model is continuously queried on the policy's *current* outputs, providing a richer and more adaptive training signal. This on-policy nature is a double-edged sword: it enables exploration but also enables reward hacking.
+
+<Callout type="note">
+Iterative DPO (also called online DPO or ODPO) addresses the offline limitation by alternating between generating new completions from the current policy, collecting preferences on them, and running DPO updates. This recovers some of the on-policy benefits of RLHF while retaining the simplicity of DPO. Empirically, iterative DPO often closes the gap with PPO-based RLHF on standard benchmarks.
+</Callout>
+
+### Failure Modes
+
+DPO's primary failure mode is **distribution mismatch**: if the preference data was generated by a very different policy than $\pi_{\text{ref}}$, the implicit reward parameterization may be poorly calibrated. In extreme cases, the model can learn to simply reduce the probability of rejected completions without meaningfully increasing the probability of preferred ones — a degenerate form of "winning by making the other option worse."
+
+RLHF's primary failure mode is **reward hacking**, which I discussed above. It also suffers from training instability — PPO optimization can diverge if hyperparameters are not carefully tuned, and the interaction between the value function and the policy gradient introduces additional sources of variance.
+
+## When to Use Which
+
+Based on my experience and the evolving literature, here is my current heuristic:
+
+**Use DPO when:**
+- You have a high-quality, static preference dataset and want fast iteration.
+- Compute is limited — you cannot afford 4 models in memory.
+- You want a simple, debuggable pipeline with minimal moving parts.
+- You are doing research and want to isolate alignment from RL engineering concerns.
+
+**Use RLHF (PPO) when:**
+- You have the infrastructure and expertise to tune PPO properly.
+- Your task requires on-policy exploration (e.g., the model needs to discover novel strategies).
+- You need fine-grained control via a reward model (e.g., multi-objective optimization with distinct reward heads).
+- You are operating at scale with mature infrastructure (e.g., the OpenAI or Anthropic setting).
+
+**Consider alternatives** like KTO (Kahneman-Tversky Optimization), IPO (Identity Preference Optimization), or ORPO when DPO's assumptions do not hold — for instance, KTO does not require pairwise preferences at all, only binary labels on individual completions.
+
+## Closing Thoughts
+
+The core contribution of DPO is not just algorithmic simplicity — it is a conceptual reframing. The reward model is not a fundamental object; it is an intermediary that can be analytically eliminated. The "true" alignment signal lives in the relationship between the optimal policy and the reference policy. Once you see this, reward model training starts to feel like an unnecessary detour.
+
+That said, I do not want to oversell. DPO is solving the same underlying problem as RLHF, with the same fundamental assumptions (Bradley-Terry preferences, KL-constrained optimization). It inherits the limitations of those assumptions. And the offline nature of vanilla DPO is a genuine constraint for tasks requiring exploration.
+
+But for the vast majority of alignment work I do — fine-tuning 7B-13B models on curated preference datasets — DPO has replaced RLHF entirely. The reduced engineering complexity, lower compute requirements, and comparable empirical performance make it the pragmatic choice. I stopped training reward models, and I have not looked back.
+
+---
+
+*References: Rafailov et al., "Direct Preference Optimization: Your Language Model is Secretly a Reward Model" (NeurIPS 2023). Ouyang et al., "Training language models to follow instructions with human feedback" (NeurIPS 2022). Schulman et al., "Proximal Policy Optimization Algorithms" (2017).*

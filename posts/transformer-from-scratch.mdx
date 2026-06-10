@@ -1,0 +1,378 @@
+export const meta = {
+  title: "Building Multi-Head Attention from First Principles in PyTorch",
+  date: "2025-04-28",
+  description: "A from-scratch PyTorch implementation of multi-head attention — the mathematical foundations, the engineering details that papers leave out, and why I think every ML researcher should build this once.",
+  tags: ["Transformers", "Attention", "PyTorch", "From Scratch"],
+  readTime: "15 min read"
+};
+
+# Building Multi-Head Attention from First Principles in PyTorch
+
+There is a particular kind of understanding you get only by building something yourself. I have read "Attention Is All You Need" more times than I can count, watched dozens of explanations, and stepped through reference implementations line by line. But I did not *truly* internalize multi-head attention until I derived every matrix dimension on paper and then wrote the PyTorch code to match — encountering every subtle numerical trap along the way.
+
+This post is the result of that exercise. Not a tutorial — more of an annotated implementation journal. I will walk through the mathematical formulation, translate it into PyTorch with explicit design decisions, and highlight the engineering details that Vaswani et al. left implicit. If you work in ML research and have not done this at least once, I strongly recommend it. The gap between reading an equation and making it run on a GPU is where real understanding lives.
+
+## The Mathematical Foundation
+
+### Scaled Dot-Product Attention
+
+The core operation is deceptively simple. Given query, key, and value matrices, attention computes a weighted sum of values where the weights are determined by the compatibility between queries and keys:
+
+$$\text{Attention}(Q, K, V) = \text{softmax}\left(\frac{QK^T}{\sqrt{d_k}}\right)V$$
+
+where $Q \in \mathbb{R}^{n \times d_k}$, $K \in \mathbb{R}^{m \times d_k}$, $V \in \mathbb{R}^{m \times d_v}$, and $n$, $m$ are the query and key/value sequence lengths respectively.
+
+The softmax is applied row-wise, normalizing each query's attention distribution over all keys:
+
+$$\text{softmax}(z_i) = \frac{e^{z_i}}{\sum_{j=1}^{m} e^{z_j}}$$
+
+<Callout type="note">
+The scaling factor $\frac{1}{\sqrt{d_k}}$ is not cosmetic. For large $d_k$, the dot products $q \cdot k$ grow in magnitude proportionally to $\sqrt{d_k}$ (assuming unit-variance inputs), pushing the softmax into saturation regions where gradients vanish. This was a known problem with additive attention alternatives — Vaswani et al. solved it with a single division. Simple and effective.
+</Callout>
+
+### Query, Key, Value Projections
+
+The inputs do not arrive as $Q$, $K$, $V$ directly. They are *learned linear projections* of the input embeddings:
+
+$$Q = XW^Q, \quad K = XW^K, \quad V = XW^V$$
+
+where $X \in \mathbb{R}^{n \times d_{\text{model}}}$ is the input sequence of embeddings, and $W^Q, W^K \in \mathbb{R}^{d_{\text{model}} \times d_k}$, $W^V \in \mathbb{R}^{d_{\text{model}} \times d_v}$ are learned parameter matrices.
+
+In self-attention, the same input $X$ is used to produce all three. In cross-attention (as in the decoder attending to encoder outputs), $Q$ comes from the decoder and $K$, $V$ from the encoder. The projection matrices are what give the model the capacity to learn *what to attend to* versus *what information to extract*.
+
+### Multi-Head Attention
+
+A single attention function captures one notion of relevance. Multi-head attention runs $h$ parallel attention operations, each with its own learned projections, then concatenates the results:
+
+$$\text{MultiHead}(Q, K, V) = \text{Concat}(\text{head}_1, \dots, \text{head}_h) W^O$$
+
+where each head is:
+
+$$\text{head}_i = \text{Attention}(QW_i^Q, KW_i^K, VW_i^V)$$
+
+with $W_i^Q, W_i^K \in \mathbb{R}^{d_{\text{model}} \times d_k}$, $W_i^V \in \mathbb{R}^{d_{\text{model}} \times d_v}$, and $W^O \in \mathbb{R}^{hd_v \times d_{\text{model}}}$.
+
+Typically $d_k = d_v = d_{\text{model}} / h$, so the total computational cost is equivalent to a single head with full dimensionality. This is an elegant design — you get representational diversity at no additional parameter or compute cost.
+
+## Computation Flow
+
+The following diagram traces data through the multi-head attention block, from raw input to output projection:
+
+<Mermaid chart={`graph TD
+    X["Input X<br/>(batch, seq_len, d_model)"] --> WQ["W_Q Projection"]
+    X --> WK["W_K Projection"]
+    X --> WV["W_V Projection"]
+    WQ --> Q["Q<br/>(batch, seq_len, d_model)"]
+    WK --> K["K<br/>(batch, seq_len, d_model)"]
+    WV --> V["V<br/>(batch, seq_len, d_model)"]
+    Q --> SPLIT_Q["Reshape & Split Heads"]
+    K --> SPLIT_K["Reshape & Split Heads"]
+    V --> SPLIT_V["Reshape & Split Heads"]
+    SPLIT_Q --> QH["Q per head<br/>(batch, h, seq_len, d_k)"]
+    SPLIT_K --> KH["K per head<br/>(batch, h, seq_len, d_k)"]
+    SPLIT_V --> VH["V per head<br/>(batch, h, seq_len, d_v)"]
+    QH --> SDPA["Scaled Dot-Product<br/>Attention"]
+    KH --> SDPA
+    VH --> SDPA
+    SDPA --> ATTN_OUT["Attention Output<br/>(batch, h, seq_len, d_v)"]
+    ATTN_OUT --> CONCAT["Concat Heads<br/>(batch, seq_len, h * d_v)"]
+    CONCAT --> WO["W_O Output Projection"]
+    WO --> OUT["Output<br/>(batch, seq_len, d_model)"]
+`} />
+
+## Implementation: Scaled Dot-Product Attention
+
+Let us start with the primitive operation. This function handles everything inside a single head.
+
+```python
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+import math
+from typing import Optional
+
+def scaled_dot_product_attention(
+    query: torch.Tensor,     # (batch, heads, seq_len_q, d_k)
+    key: torch.Tensor,       # (batch, heads, seq_len_k, d_k)
+    value: torch.Tensor,     # (batch, heads, seq_len_k, d_v)
+    mask: Optional[torch.Tensor] = None,
+    dropout: Optional[nn.Dropout] = None,
+) -> tuple[torch.Tensor, torch.Tensor]:
+    """
+    Compute scaled dot-product attention.
+
+    Returns:
+        output: weighted sum of values, shape (batch, heads, seq_len_q, d_v)
+        attention_weights: softmax weights, shape (batch, heads, seq_len_q, seq_len_k)
+    """
+    d_k = query.size(-1)
+
+    # (batch, heads, seq_len_q, d_k) @ (batch, heads, d_k, seq_len_k)
+    # -> (batch, heads, seq_len_q, seq_len_k)
+    scores = torch.matmul(query, key.transpose(-2, -1)) / math.sqrt(d_k)
+
+    # Apply mask before softmax
+    if mask is not None:
+        scores = scores.masked_fill(mask == 0, float('-inf'))
+
+    attention_weights = F.softmax(scores, dim=-1)
+
+    if dropout is not None:
+        attention_weights = dropout(attention_weights)
+
+    # (batch, heads, seq_len_q, seq_len_k) @ (batch, heads, seq_len_k, d_v)
+    # -> (batch, heads, seq_len_q, d_v)
+    output = torch.matmul(attention_weights, value)
+
+    return output, attention_weights
+```
+
+A few design decisions worth noting:
+
+**The scaling happens before masking.** This matters. If you mask first, the unmasked scores are unscaled and you get the same saturation problem the scaling was designed to prevent.
+
+**`masked_fill` with `-inf`, not a large negative number.** Using `-inf` guarantees that softmax produces exactly zero for masked positions regardless of the score distribution. Using `-1e9` is an approximation that can leak tiny attention weights to masked tokens — a subtle bug I have seen in production code.
+
+**Returning attention weights.** This is not strictly necessary for the forward pass, but attention maps are indispensable for debugging and interpretability. Always keep this pathway available.
+
+<Callout type="warning">
+When using `float('-inf')` with mixed-precision training (fp16), be cautious. In fp16, the minimum representable value is roughly $-65504$. PyTorch handles the cast, but if you are implementing custom kernels or exporting to ONNX, verify that your masking values survive the dtype conversion. A safer alternative in fp16 contexts is `torch.finfo(scores.dtype).min`.
+</Callout>
+
+## Implementation: The Multi-Head Attention Module
+
+Now the full module. The key engineering insight is that you do not literally create $h$ separate linear layers. Instead, you project into the full $d_{\text{model}}$ space once, then *reshape* to split heads — this is mathematically equivalent but far more efficient because it uses a single large matrix multiply instead of $h$ small ones.
+
+```python
+class MultiHeadAttention(nn.Module):
+    def __init__(
+        self,
+        d_model: int,
+        num_heads: int,
+        dropout: float = 0.0,
+        bias: bool = True,
+    ):
+        super().__init__()
+        assert d_model % num_heads == 0, (
+            f"d_model ({d_model}) must be divisible by num_heads ({num_heads})"
+        )
+
+        self.d_model = d_model
+        self.num_heads = num_heads
+        self.d_k = d_model // num_heads  # d_k = d_v in standard transformer
+
+        # Combined projections: single linear layer projects to all heads at once
+        self.w_q = nn.Linear(d_model, d_model, bias=bias)
+        self.w_k = nn.Linear(d_model, d_model, bias=bias)
+        self.w_v = nn.Linear(d_model, d_model, bias=bias)
+
+        # Output projection
+        self.w_o = nn.Linear(d_model, d_model, bias=bias)
+
+        self.dropout = nn.Dropout(p=dropout) if dropout > 0.0 else None
+        self.attention_weights = None  # stored for visualization
+
+    def _split_heads(self, x: torch.Tensor) -> torch.Tensor:
+        """
+        Reshape (batch, seq_len, d_model) -> (batch, num_heads, seq_len, d_k)
+        """
+        batch_size, seq_len, _ = x.size()
+        x = x.view(batch_size, seq_len, self.num_heads, self.d_k)
+        return x.transpose(1, 2)  # (batch, num_heads, seq_len, d_k)
+
+    def _combine_heads(self, x: torch.Tensor) -> torch.Tensor:
+        """
+        Reshape (batch, num_heads, seq_len, d_k) -> (batch, seq_len, d_model)
+        """
+        batch_size, _, seq_len, _ = x.size()
+        x = x.transpose(1, 2).contiguous()  # (batch, seq_len, num_heads, d_k)
+        return x.view(batch_size, seq_len, self.d_model)
+
+    def forward(
+        self,
+        query: torch.Tensor,   # (batch, seq_len_q, d_model)
+        key: torch.Tensor,     # (batch, seq_len_k, d_model)
+        value: torch.Tensor,   # (batch, seq_len_k, d_model)
+        mask: Optional[torch.Tensor] = None,
+    ) -> torch.Tensor:
+        # 1. Linear projections
+        Q = self.w_q(query)   # (batch, seq_len_q, d_model)
+        K = self.w_k(key)     # (batch, seq_len_k, d_model)
+        V = self.w_v(value)   # (batch, seq_len_k, d_model)
+
+        # 2. Split into heads
+        Q = self._split_heads(Q)  # (batch, num_heads, seq_len_q, d_k)
+        K = self._split_heads(K)  # (batch, num_heads, seq_len_k, d_k)
+        V = self._split_heads(V)  # (batch, num_heads, seq_len_k, d_k)
+
+        # 3. Scaled dot-product attention (applied in parallel across heads)
+        attn_output, self.attention_weights = scaled_dot_product_attention(
+            Q, K, V, mask=mask, dropout=self.dropout
+        )
+
+        # 4. Concatenate heads and project
+        output = self._combine_heads(attn_output)  # (batch, seq_len_q, d_model)
+        output = self.w_o(output)                   # (batch, seq_len_q, d_model)
+
+        return output
+```
+
+### Why `.contiguous()` Matters
+
+Notice the `.contiguous()` call in `_combine_heads`. After `transpose(1, 2)`, the tensor's memory layout no longer matches its logical layout — the strides are permuted. The subsequent `.view()` requires contiguous memory. Without `.contiguous()`, PyTorch will raise a `RuntimeError`. This is one of those details that papers never mention but every implementer encounters.
+
+### The Single-Projection Trick
+
+Each `nn.Linear(d_model, d_model)` is doing the work of $h$ separate `nn.Linear(d_model, d_k)` layers concatenated. The reshape in `_split_heads` is what partitions the output into per-head subspaces. This equivalence holds because:
+
+$$[W_1^Q \| W_2^Q \| \dots \| W_h^Q] = W^Q \in \mathbb{R}^{d_{\text{model}} \times d_{\text{model}}}$$
+
+The columns of the combined weight matrix are implicitly partitioned into $h$ groups of $d_k$ columns each. The reshape just makes this partition explicit in the tensor layout.
+
+## Masking: Causal and Padding
+
+Masking is where implementations diverge the most. There are two distinct types, and conflating them causes bugs.
+
+**Padding masks** prevent attention to padding tokens. They have shape `(batch, 1, 1, seq_len_k)` so they broadcast across all heads and query positions:
+
+```python
+def create_padding_mask(seq: torch.Tensor, pad_token_id: int = 0) -> torch.Tensor:
+    """
+    Args:
+        seq: token IDs, shape (batch, seq_len)
+    Returns:
+        mask: shape (batch, 1, 1, seq_len), 1 for valid tokens, 0 for padding
+    """
+    return (seq != pad_token_id).unsqueeze(1).unsqueeze(2)  # (batch, 1, 1, seq_len)
+```
+
+**Causal masks** prevent attention to future positions. This is essential for autoregressive decoding — position $i$ should only attend to positions $\leq i$:
+
+```python
+def create_causal_mask(seq_len: int, device: torch.device = None) -> torch.Tensor:
+    """
+    Returns:
+        mask: shape (1, 1, seq_len, seq_len), upper triangle is 0 (masked)
+    """
+    mask = torch.tril(torch.ones(seq_len, seq_len, device=device))
+    return mask.unsqueeze(0).unsqueeze(0)  # (1, 1, seq_len, seq_len)
+```
+
+To combine both, element-wise multiply them. The broadcasting rules handle the shape differences:
+
+```python
+# Combined mask: both causal and padding
+combined_mask = causal_mask * padding_mask  # broadcasts correctly
+```
+
+## Visualizing Attention
+
+Once the implementation is working, visualizing the attention weight matrix $A = \text{softmax}\left(\frac{QK^T}{\sqrt{d_k}}\right)$ is one of the most informative debugging tools available. Each row corresponds to a query token, each column to a key token, and the intensity indicates how much attention weight flows between them.
+
+![Attention weight visualization](/atten_date.png)
+<Caption>Figure 1: Attention weight matrix showing how each token attends to others in the sequence. The diagonal pattern indicates strong self-attention, while off-diagonal weights capture cross-token dependencies.</Caption>
+
+In practice, different heads learn qualitatively different attention patterns. Some heads attend locally (nearby tokens), others capture long-range dependencies, and some learn syntactic relationships. This representational diversity is precisely why multi-head attention works better than a single head with equivalent parameter count.
+
+## Putting It All Together
+
+Here is a complete usage example demonstrating self-attention with causal masking, the typical configuration for decoder-only language models like GPT:
+
+```python
+# Configuration
+batch_size = 2
+seq_len = 16
+d_model = 512
+num_heads = 8
+
+# Initialize module
+mha = MultiHeadAttention(d_model=d_model, num_heads=num_heads, dropout=0.1)
+
+# Simulated input embeddings (e.g., from token embedding + positional encoding)
+x = torch.randn(batch_size, seq_len, d_model)
+
+# Create causal mask for autoregressive attention
+causal_mask = create_causal_mask(seq_len, device=x.device)
+
+# Self-attention: Q, K, V all come from the same input
+output = mha(query=x, key=x, value=x, mask=causal_mask)
+
+print(f"Input shape:  {x.shape}")      # (2, 16, 512)
+print(f"Output shape: {output.shape}")  # (2, 16, 512)
+
+# Access attention weights for analysis
+print(f"Attention weights shape: {mha.attention_weights.shape}")
+# (2, 8, 16, 16) — one 16x16 attention map per head per batch element
+
+# Verify attention weights sum to 1 across key dimension
+weight_sums = mha.attention_weights.sum(dim=-1)
+print(f"Weight sums (should be ~1.0): {weight_sums[0, 0, :5]}")
+
+# Parameter count
+total_params = sum(p.numel() for p in mha.parameters())
+print(f"Total parameters: {total_params:,}")
+# 4 * 512 * 512 + 4 * 512 (biases) = 1,050,624
+```
+
+<Callout type="tip">
+For cross-attention (e.g., decoder attending to encoder), the only change is the source of key and value tensors. Pass `query=decoder_hidden, key=encoder_output, value=encoder_output`. The implementation handles mismatched sequence lengths between query and key/value naturally — the attention score matrix will simply be non-square, with shape `(seq_len_q, seq_len_k)`.
+</Callout>
+
+## Numerical Stability: Beyond the Scaling Factor
+
+The $1/\sqrt{d_k}$ scaling is the most well-known stability trick, but it is not the only one that matters in practice.
+
+**Softmax stability.** The naive softmax computation $e^{z_i} / \sum_j e^{z_j}$ can overflow for large $z_i$. The standard fix is to subtract the row maximum before exponentiation:
+
+$$\text{softmax}(z_i) = \frac{e^{z_i - \max(z)}}{{\sum_{j} e^{z_j - \max(z)}}}$$
+
+This is mathematically equivalent (the constants cancel) but numerically stable. PyTorch's `F.softmax` already implements this, so you get it for free — but know *why* it is there if you ever write a custom CUDA kernel.
+
+**Gradient flow through softmax.** When attention weights become very peaked (near one-hot), the Jacobian of the softmax approaches zero everywhere. This can cause vanishing gradients during training, particularly in deeper transformer layers. Attention dropout and the scaling factor both help mitigate this, but it is a fundamental limitation of the softmax attention mechanism. This is part of the motivation behind alternatives like linear attention and sparse attention patterns in recent research.
+
+## Connection to the Full Transformer
+
+Multi-head attention is the computational core, but a full transformer layer wraps it with residual connections and normalization:
+
+```python
+class TransformerEncoderLayer(nn.Module):
+    def __init__(self, d_model: int, num_heads: int, d_ff: int, dropout: float = 0.1):
+        super().__init__()
+        self.self_attn = MultiHeadAttention(d_model, num_heads, dropout)
+        self.feed_forward = nn.Sequential(
+            nn.Linear(d_model, d_ff),
+            nn.ReLU(),
+            nn.Linear(d_ff, d_model),
+        )
+        self.norm1 = nn.LayerNorm(d_model)
+        self.norm2 = nn.LayerNorm(d_model)
+        self.dropout = nn.Dropout(dropout)
+
+    def forward(self, x: torch.Tensor, mask: Optional[torch.Tensor] = None):
+        # Pre-norm variant (used in GPT-2, modern architectures)
+        attn_out = self.self_attn(
+            query=self.norm1(x), key=self.norm1(x), value=self.norm1(x), mask=mask
+        )
+        x = x + self.dropout(attn_out)          # residual connection
+
+        ff_out = self.feed_forward(self.norm2(x))
+        x = x + self.dropout(ff_out)            # residual connection
+
+        return x
+```
+
+Note that I am using the **pre-norm** variant (LayerNorm before the sublayer) rather than the original post-norm formulation. Pre-norm transformers train more stably and are used in virtually all modern architectures including GPT-2, LLaMA, and their derivatives. The original post-norm order requires careful learning rate warmup to avoid divergence — another detail the 2017 paper does not emphasize.
+
+## Reflections
+
+Implementing multi-head attention from scratch taught me several things that reading papers alone did not:
+
+1. **Tensor reshaping is the real engineering.** The mathematical formulation with separate per-head weight matrices is clean but impractical. The reshape-based implementation is what actually runs, and understanding the equivalence requires careful reasoning about memory layout.
+
+2. **Masking is underspecified in papers.** The original paper mentions masking in one sentence. In practice, getting mask shapes, broadcasting, and the interaction between causal and padding masks correct is a significant implementation effort.
+
+3. **Numerical considerations compound.** Scaling, softmax stability, and dtype-aware masking values are individually simple but collectively crucial. Missing any one can cause training to silently degrade.
+
+4. **The abstraction boundary matters.** Separating `scaled_dot_product_attention` as a standalone function from `MultiHeadAttention` as a module mirrors how PyTorch itself is structured (see `torch.nn.functional.scaled_dot_product_attention` in PyTorch 2.0+). Good API design reveals the conceptual structure.
+
+The attention mechanism is ultimately a differentiable dictionary lookup — queries retrieve relevant information from values, with keys determining the routing. Once you internalize this, the entire transformer architecture becomes transparent: it is just layers of learned routing composed with position-wise transformations. Building it from first principles is how that intuition becomes permanent.

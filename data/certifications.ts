@@ -12,12 +12,113 @@ export interface Certificate {
 export const certificates: Certificate[] = [
   {
     id: 1,
+    title: 'Machine Learning Specialization',
+    issuer: 'Stanford University & DeepLearning.AI',
+    date: 'January 2025',
+    url: 'https://www.coursera.org/account/accomplishments/specialization/certificate/R4XYVLOGQC4G',
+    description: 'Comprehensive training in fundamental machine learning architectures and algorithms. Encompasses supervised modeling, unsupervised clustering, recommender systems, and deep reinforcement learning implemented via NumPy, scikit-learn, and TensorFlow.',
+    imageUrl: '/certificates/ml_specialization.png',
+    courses: [
+      { name: 'Supervised Machine Learning: Regression and Classification', description: 'Mathematical foundation and implementation of linear and logistic regression models for predictive analysis and binary classification.' },
+      { name: 'Advanced Learning Algorithms', description: 'Development of multi-class classification neural networks, decision trees, and tree ensemble methods (random forests, boosted trees).' },
+      { name: 'Unsupervised Learning, Recommenders, Reinforcement Learning', description: 'Application of clustering, anomaly detection, collaborative filtering, and deep reinforcement learning architectures.' }
+    ]
+  },
+  {
+    id: 2,
+    title: 'Deep Learning Specialization',
+    issuer: 'DeepLearning.AI',
+    date: 'July 2025',
+    url: 'https://www.coursera.org/account/accomplishments/specialization/certificate/T8EI8I4UGWVX',
+    description: 'Advanced mastery of deep neural network architectures, optimization strategies, and deployment configurations. Cover mathematical derivations, vectorized implementations, and foundational frameworks for computer vision, generative AI, and natural language processing.',
+    imageUrl: '/certificates/dl_specialization.png',
+    courses: [
+      { name: 'Neural Networks and Deep Learning', description: 'Mathematical derivation, vectorization, and implementation of deep forward-propagating neural networks from foundational principles.' },
+      { name: 'Improving Deep Neural Networks: Hyperparameter Tuning, Regularization and Optimization', description: 'Deep-dive into performance tuning using mathematical optimization algorithms (Adam, RMSprop), strategic weight initialization, and regularization methods.' },
+      { name: 'Structuring Machine Learning Projects', description: 'Technical leadership strategies for ML systems, diagnostic error analysis, training/test set distribution handling, and transfer learning workflows.' },
+      { name: 'Convolutional Neural Networks', description: 'Spatial engineering for computer vision tasks, including residual networks, visual object detection pipelines (YOLO), and neural style transfer.' },
+      { name: 'Sequence Models', description: 'Temporal modeling leveraging RNNs, LSTMs, word embeddings, Hugging Face transformers, and tokenization for specialized NLP architectures.' }
+    ]
+  },
+  {
+    id: 3,
+    title: 'Natural Language Processing Specialization',
+    issuer: 'DeepLearning.AI',
+    date: 'June 2025',
+    url: 'https://www.coursera.org/account/accomplishments/specialization/certificate/WHJAL2SZ9W8L',
+    description: 'Advanced engineering of natural language processing systems. Encompasses statistical language modeling, sequence architectures (RNNs, LSTMs, GRUs), and transformer-based attention mechanisms for machine translation, text summarization, and large language modeling.',
+    imageUrl: '/certificates/nlp_specialization.png',
+    courses: [
+      { name: 'Natural Language Processing with Classification and Vector Spaces', description: 'Implementation of sentiment analysis and word translation models using logistic regression, naïve Bayes, and locality-sensitive hashing.' },
+      { name: 'Natural Language Processing with Probabilistic Models', description: 'Development of autocomplete, autocorrect, and part-of-speech tagging engines using hidden Markov models and dynamic programming.' },
+      { name: 'Natural Language Processing with Sequence Models', description: 'Designing deep sequence architectures including recurrent neural networks, LSTMs, GRUs, and Siamese networks in TensorFlow for text generation and NER.' },
+      { name: 'Natural Language Processing with Attention Models', description: 'Engineering encoder-decoder topologies, self-attention mechanisms, and causal models (BERT, T5) utilizing Hugging Face Transformers.' }
+    ]
+  },
+  {
+    id: 4,
+    title: 'IBM AI Engineering Professional Certificate',
+    issuer: 'IBM',
+    date: 'June 2025',
+    url: 'https://coursera.org/verify/professional-cert/7BR7V0CNUOO6',
+    description: 'Comprehensive engineering curriculum spanning deep learning frameworks (PyTorch, TensorFlow, Keras) and state-of-the-art Generative AI. Focuses on LLM architectures, advanced fine-tuning methodologies (PEFT, RLHF, DPO), and deploying agentic workflows utilizing RAG, LangChain, and vector databases.',
+    imageUrl: '/certificates/ibm_ai_eng_professional_cert.jpeg',
+    courses: [
+      { name: 'Machine Learning with Python', description: 'Core supervised and unsupervised learning algorithms utilizing scikit-learn.' },
+      { name: 'Introduction to Deep Learning & Neural Networks with Keras', description: 'Foundational principles of artificial neural networks and deep learning architectures.' },
+      { name: 'Deep Learning with Keras and Tensorflow', description: 'Development of advanced CNNs, autoencoders, and deep learning models in TensorFlow 2.x.' },
+      { name: 'Introduction to Neural Networks and PyTorch', description: 'PyTorch ecosystem fundamentals, including tensor operations, autograd, and regression modeling.' },
+      { name: 'Deep Learning with PyTorch', description: 'Engineering and deploying deep neural networks and CNNs for multi-class classification.' },
+      { name: 'AI Capstone Project with Deep Learning', description: 'End-to-end design and evaluation of an image classification pipeline.' },
+      { name: 'Generative AI and LLMs: Architecture and Data Preparation', description: 'Architectural analysis of foundational models (GPT, BERT) and text tokenization pipelines.' },
+      { name: 'Gen AI Foundational Models for NLP & Language Understanding', description: 'Contextual word embeddings and sequence-to-sequence encoder-decoder structures.' },
+      { name: 'Generative AI Language Modeling with Transformers', description: 'Implementation of self-attention mechanisms and transformer topologies using PyTorch.' },
+      { name: 'Generative AI Engineering and Fine-Tuning Transformers', description: 'Parameter-efficient fine-tuning (PEFT, LoRA, QLoRA) leveraging the Hugging Face ecosystem.' },
+      { name: 'Generative AI Advanced Fine-Tuning for LLMs', description: 'Advanced model alignment via RLHF, Direct Preference Optimization (DPO), and PPO.' },
+      { name: 'Fundamentals of AI Agents Using RAG and LangChain', description: 'Architecting AI agents, tool calling, and retrieval-augmented generation (RAG) pipelines.' },
+      { name: 'Project: Generative AI Applications with RAG and LangChain', description: 'Deployment of an end-to-end LLM application integrating vector databases and a Gradio UI.' }
+    ]
+  },
+  {
+    id: 5,
+    title: 'Generative AI Engineering with LLMs Specialization',
+    issuer: 'IBM',
+    date: 'May 2025',
+    url: 'https://www.coursera.org/account/accomplishments/specialization/PQP8G2WWZ7QX',
+    description: 'Specialized track focused on the industrial production and engineering of large language models. Covers self-attention mechanics, parameter-efficient alignment (LoRA, QLoRA), human preference optimization (RLHF, DPO), and the implementation of multi-agent RAG architectures using LangChain.',
+    imageUrl: '/certificates/ibm_genai_eng_with_llms_specialization.jpeg',
+    courses: [
+      { name: 'Generative AI and LLMs: Architecture and Data Preparation', description: 'Deep-dive into foundational model architectures (GPT, BERT, T5) and custom PyTorch data loader development with specialized tokenization pipelines.' },
+      { name: 'Gen AI Foundational Models for NLP & Language Understanding', description: 'Mathematical framing and implementation of context-aware word embeddings and sequence-to-sequence networks.' },
+      { name: 'Generative AI Language Modeling with Transformers', description: 'From-scratch engineering of transformer components, focusing on positional encodings, attention matrices, and causal masking mechanics.' },
+      { name: 'Generative AI Engineering and Fine-Tuning Transformers', description: 'Applying PEFT methodologies including LoRA and QLoRA to optimize foundational weights for domain-specific tasks.' },
+      { name: 'Generative AI Advanced Fine-Tuning for LLMs', description: 'Advanced policy alignment using reward modeling, Proximal Policy Optimization (PPO), and Direct Preference Optimization (DPO).' },
+      { name: 'Fundamentals of AI Agents Using RAG and LangChain', description: 'Architecting structured chain workflows, context window management, tool calling systems, and autonomous agent state loops.' },
+      { name: 'Project: Generative AI Applications with RAG and LangChain', description: 'Production-ready capstone constructing an end-to-end conversational agent integrated with vector databases and a Gradio interface.' }
+    ]
+  },
+  {
+    id: 6,
+    title: 'AWS AI Practitioner Certification Prep Specialization',
+    issuer: 'LearnKartS',
+    date: 'November 2025',
+    url: 'https://www.coursera.org/account/accomplishments/specialization/AXP2244GHJ6L',
+    description: 'Comprehensive preparation for enterprise AI deployment on Amazon Web Services. Focuses on foundational machine learning workflows, cloud infrastructure optimization via Amazon SageMaker, generative AI engineering using Amazon Bedrock, and building secure, compliant MLOps pipelines.',
+    imageUrl: '/certificates/aws_ai_practitioner_cert.png',
+    courses: [
+      { name: 'Introduction to AI and Machine Learning', description: 'Core principles of supervised, unsupervised, and reinforcement learning integrated with basic cloud infrastructure and data preprocessing on AWS.' },
+      { name: 'AWS Tools and Services for AI', description: 'Developing cloud-native intelligent solutions using Amazon Bedrock, Amazon Q, custom prompt optimization architectures, and Retrieval-Augmented Generation (RAG).' },
+      { name: 'Responsible AI with AWS Security and Governance', description: 'Engineering secure MLOps ecosystems using AWS IAM, data encryption mechanisms, risk mitigation strategies, and fairness/bias monitoring protocols.' }
+    ]
+  },
+  {
+    id: 7,
     title: 'AWS Generative AI Applications Professional Certificate',
     issuer: 'Amazon Web Services (AWS) & Coursera',
     date: 'October 2025',
     url: 'https://www.coursera.org/account/accomplishments/specialization/certificate/B92LWNFAEQNF',
     description: 'Professional curriculum on architectural design, development, and deployment of generative AI solutions using AWS infrastructure. Focus areas include Amazon Bedrock, large language model deployment, and responsible AI governance.',
-    imageUrl: '/certs/aws-genai-prof-cert.png',
+    imageUrl: '/certificates/aws_genai_applications_professional_cert.png',
     courses: [
       { name: 'AI Fundamentals and the Cloud', description: 'Evaluation of foundational models, responsible AI frameworks, and Amazon SageMaker utilization.' },
       { name: 'AWS Services for AI Solutions', description: 'Application architecture for Generative AI and computer vision; prompt engineering methodologies.' },
@@ -25,65 +126,13 @@ export const certificates: Certificate[] = [
     ],
   },
   {
-    id: 2,
-    title: 'AWS AI Practitioner Specialization',
-    issuer: 'LearnKartS & Coursera',
-    date: 'November 2025',
-    url: 'https://www.coursera.org/account/accomplishments/specialization/certificate/AXP2244GHJ6L',
-    description: 'Curriculum focused on the practical application of AI/ML services within the AWS ecosystem. Topics encompass diffusion models, Retrieval-Augmented Generation (RAG), and security governance via IAM.',
-    imageUrl: '/certs/aws-ai-practitioner-spec.png',
-    courses: [
-      { name: 'Introduction to AI and Machine Learning', description: 'Supervised/unsupervised algorithms, deep learning principles, and statistical modeling basics.' },
-      { name: 'AWS Tools and Services for AI', description: 'Architectural implementation of RAG and LLM fine-tuning utilizing Amazon Bedrock.' },
-      { name: 'Responsible AI with AWS Security', description: 'Risk mitigation, ethical frameworks, and security access controls for AI systems.' },
-    ],
-  },
-  {
-    id: 3,
-    title: 'Deep Learning Specialization',
-    issuer: 'DeepLearning.AI & Coursera',
-    date: 'July 2025',
-    url: 'https://www.coursera.org/account/accomplishments/specialization/certificate/T8EI8I4UGWVX',
-    description: 'Comprehensive study of deep learning architectures including CNNs, RNNs, LSTMs, and Transformers. Includes mathematical foundations of backpropagation, hyperparameter optimization, and regularization methodologies.',
-    imageUrl: '/certs/deep-learning-spec.png',
-    courses: [
-      { name: 'Neural Networks and Deep Learning', description: 'Mathematical derivation and vectorized implementation of deep neural networks.' },
-      { name: 'Improving Deep Neural Networks', description: 'Optimization algorithms (Adam, RMSprop), Batch Normalization, and regularization.' },
-      { name: 'Structuring Machine Learning Projects', description: 'Empirical error analysis, dataset distribution strategies, and transfer learning.' },
-      { name: 'Convolutional Neural Networks', description: 'Spatial feature extraction, object detection architectures (YOLO), and residual networks.' },
-      { name: 'Sequence Models', description: 'Temporal modeling via RNNs, LSTMs, Word Embeddings, and Transformer attention mechanisms.' },
-    ],
-  },
-  {
-    id: 4,
-    title: 'Generative AI with Large Language Models',
-    issuer: 'DeepLearning.AI & AWS via Coursera',
-    date: 'August 2025',
-    url: 'https://www.coursera.org/account/accomplishments/certificate/5X3XMVAPVPYL',
-    description: 'Advanced study of Transformer architectures, autoregressive language modeling, parameter-efficient fine-tuning (PEFT), and Reinforcement Learning from Human Feedback (RLHF).',
-  },
-  {
-    id: 5,
-    title: 'IBM Machine Learning Professional Certificate',
-    issuer: 'IBM via Coursera',
-    date: 'May 2025',
-    url: 'https://www.coursera.org/account/accomplishments/specialization/certificate/9N54WXC27S8I',
-    description: 'Curriculum spanning classical machine learning (regression, classification, clustering) to deep learning paradigms utilizing Scikit-learn and Keras frameworks.',
-  },
-  {
-    id: 6,
-    title: 'Machine Learning Specialization',
-    issuer: 'Stanford University & DeepLearning.AI',
-    date: 'January 2024',
-    url: 'https://www.coursera.org/account/accomplishments/specialization/certificate/R4XYVLOGQC4G',
-    description: 'Foundational mathematics and algorithms for supervised learning, unsupervised learning, and reinforcement learning.',
-  },
-  {
-    id: 7,
+    id: 8,
     title: 'CS50x: Introduction to Computer Science',
-    issuer: 'Harvard University via edX',
+    issuer: 'Harvard University',
     date: 'September 2024',
     url: 'https://cs50.harvard.edu/certificates/0ab081d6-255d-479f-86b9-e69549e142dd',
-    description: 'Rigorous introduction to computer science theory encompassing algorithms, memory management, and data structures in C and Python.',
-  },
+    description: 'Comprehensive foundation in computer science systems and programming. Mastered low-level memory management, complex data structures, and algorithmic efficiency in C. Engineered full-stack web applications utilizing Python, Flask, SQL, and JavaScript. Key deliverables include a custom hash-table spell checker (Speller), a stock portfolio trading platform (Finance), forensic memory recovery algorithms (Recover), and an independent capstone software architecture.',
+    imageUrl: '/certificates/CS50x.png'
+  }
+
 ];

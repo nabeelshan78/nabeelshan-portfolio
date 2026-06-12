@@ -6,7 +6,7 @@ const navItems = [
   { id: 'hero', label: 'Home' },
   { id: 'about', label: 'About' },
   { id: 'experience', label: 'Experience' },
-  { id: 'research', label: 'Research' },
+  // { id: 'research', label: 'Research' },
   { id: 'implementations', label: 'Implementations' },
   { id: 'projects', label: 'Projects' },
   { id: 'certifications', label: 'Credentials' },
@@ -99,7 +99,7 @@ const Navbar = () => {
               {label}
             </button>
           ))}
-          <Link to="/blog" className="nav-link">Blog</Link>
+          {/* <Link to="/blog" className="nav-link">Blog</Link> */}
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
@@ -184,7 +184,7 @@ const Navbar = () => {
                   {label}
                 </button>
               ))}
-              <Link
+              {/* <Link
                 to="/blog"
                 className="nav-link"
                 style={{
@@ -195,7 +195,7 @@ const Navbar = () => {
                 }}
               >
                 Blog
-              </Link>
+              </Link> */}
             </div>
           </motion.div>
         )}

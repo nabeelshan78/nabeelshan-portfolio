@@ -1,60 +1,53 @@
 const labProjects = [
   {
-    title: 'Autoregressive Transformer (GPT)',
-    description: 'Decoder-only GPT architecture in PyTorch. Multi-head causal self-attention, positional embeddings, custom tokenization, and a training loop for 22M and 52M parameter models.',
+    title: 'Attention Is All You Need - From Scratch',
+    description: 'First-principles PyTorch implementation of the original Encoder-Decoder Transformer. Features custom multi-head attention, Noam LR scheduling, dynamic padding and weight-tied embeddings. Verified at the tensor level.',
+    framework: 'PyTorch',
+    params: '63.1M params',
+    link: 'https://github.com/nabeelshan78/attention-is-all-you-need-scratch',
+  },
+  {
+    title: 'GPT: Autoregressive Transformer',
+    description: 'Ground-up implementation of a GPT-style language model in pure PyTorch. Scaled from 22M to 52M parameters to validate architectural capacity. Engineered with custom causal masking and inference pipelines.',
     framework: 'PyTorch',
     params: '52M params',
     link: 'https://github.com/nabeelshan78/gpt-forge-from-scratch-transformer',
   },
   {
-    title: 'RLHF Pipeline (SFT → RM → PPO)',
-    description: 'Complete 3-stage alignment pipeline from scratch. Reward model trained to 97.9% accuracy on 33k preference pairs. PPO achieved +54% preference lift over SFT baseline.',
-    framework: 'PyTorch',
-    params: '97.9% RM Acc',
-    link: 'https://github.com/nabeelshan78/reinforcement-learning-human-feedback-scratch',
+    "title": "Deep Neural Network from Scratch",
+    "description": "First-principles NumPy implementation of a fully vectorized multi-layer deep-NN. Features manual forward / backward propagation, advanced optimizers (Adam, RMSprop), and regularization. Empirically validated via optimization ablation studies.",
+    "framework": "NumPy",
+    "params": "245K params",
+    "link": "https://github.com/nabeelshan78/deep-nn-from-scratch"
   },
   {
-    title: 'PEFT: Adapters & LoRA',
-    description: 'Adapters and LoRA implemented from scratch. PEFT matches full fine-tuning accuracy (~86%) while reducing tunable parameters by >96% across BERT, GPT-2, and OPT.',
-    framework: 'PyTorch',
-    params: '>96% reduction',
-    link: 'https://github.com/nabeelshan78/Transformer-Adaptation-Playbook',
+    "title": "Convolutional Neural Network",
+    "description": "CNN built entirely in pure NumPy. Features custom multi-dimensional filters, max-pooling operations, and manually derived chain-rule backpropagation. Empirically validated on RGB datasets, demonstrating stable cross-entropy convergence.",
+    "framework": "NumPy",
+    "params": "From Scratch",
+    "link": "https://github.com/nabeelshan78/cnn-from-scratch-sign-digits"
   },
   {
-    title: 'Attention-Based Neural Machine Translation',
-    description: 'Seq2Seq architecture for English-to-French NMT. Bi-directional LSTM encoder, LSTM decoder with Additive (Bahdanau) Attention, and Beam Search decoding. 23.6M parameters.',
-    framework: 'TensorFlow',
-    params: '23.6M params',
-    link: 'https://github.com/nabeelshan78/attention-based-nmt',
+  "title": "Character-Level Recurrent Neural Net",
+  "description": "RNN from scratch for sequential modeling. Features manual backpropagation through time, custom hidden state tracking, and temperature-controlled sampling. Validated via cross-entropy loss convergence and coherent text generation.",
+  "framework": "NumPy",
+  "params": "BPTT Implementation",
+  "link": "https://github.com/nabeelshan78/vanilla-rnn-from-scratch"
   },
+  // {
+  // "title": "ResNet-50 Architecture from Scratch",
+  // "description": "Full ResNet-50 reconstruction without pre-trained weights. Encompassing custom convolutional & identity mapping alongside bottleneck residual blocks. Validated on CIFAR-10 via cross-entropy minimization.",
+  // "framework": "TensorFlow/Keras",
+  // "params": "23.5M params",
+  // "link": "https://github.com/nabeelshan78/resnet50-from-scratch-cifar10"
+  // },
   {
-    title: 'CNN in NumPy',
-    description: 'Convolutional Neural Networks using only NumPy primitives. Includes mathematical derivations for 2D convolutions, max pooling, and complete backpropagation.',
-    framework: 'NumPy',
-    params: 'From scratch',
-    link: 'https://github.com/nabeelshan78/cnn-from-scratch-sign-digits',
-  },
-  {
-    title: 'RNN & BPTT',
-    description: 'Character-level RNN implementation. Demonstrates sequential data processing, cross-entropy loss, gradient clipping, and Backpropagation Through Time (BPTT).',
-    framework: 'NumPy',
-    params: 'From scratch',
-    link: 'https://github.com/nabeelshan78/vanilla-rnn-from-scratch',
-  },
-  {
-    title: 'Deep Neural Network in NumPy',
-    description: 'Modular implementation of fully-connected networks. Forward/backward propagation, optimizers (Adam, RMSProp), initialization schemes, and regularization — all in NumPy.',
-    framework: 'NumPy',
-    params: 'From scratch',
-    link: 'https://github.com/nabeelshan78/deep-nn-from-scratch',
-  },
-  {
-    title: 'ResNet-50 from Scratch',
-    description: 'Full ResNet-50 reconstruction without pre-trained weights. Implements convolutional and identity blocks to evaluate residual learning on CIFAR-10.',
-    framework: 'TensorFlow',
-    params: '~25.6M params',
-    link: 'https://github.com/nabeelshan78/resnet50-from-scratch-cifar10',
-  },
+  "title": "Word2Vec Architectures from Scratch",
+  "description": "Built and trained CBOW and Skip-gram word embedding architectures. Includes custom context windowing. Validated through cosine similarity analysis and t-SNE clustering of learned embeddings.",
+  "framework": "PyTorch",
+  "params": "CBOW & Skip-gram",
+  "link": "https://github.com/nabeelshan78/Word2Vec-Implementations-PyTorch"
+  }
 ];
 
 const Lab = () => {
@@ -65,8 +58,7 @@ const Lab = () => {
         <span className="section-label">First-Principles Work</span>
         <h2 className="section-title">Algorithmic Implementations</h2>
         <p className="section-description">
-          Core ML architectures implemented from the ground up without reliance on high-level APIs.
-          Each repository includes the mathematical formulations, gradient derivations, and empirical validation against published results.
+          First-principles engineering of core ML architectures. Features mathematical derivations, raw tensor operations, custom architecture design, and rigorous empirical validation.
         </p>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1rem' }}>

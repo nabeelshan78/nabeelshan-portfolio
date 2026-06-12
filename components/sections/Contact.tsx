@@ -21,6 +21,7 @@ const Contact = () => {
       setStatus('success');
       formRef.current.reset();
     } catch (err) {
+      console.error("EmailJS Error:", err);
       setErrorMessage(err instanceof Error ? err.message : 'An error occurred. Please use direct email.');
       setStatus('error');
     }

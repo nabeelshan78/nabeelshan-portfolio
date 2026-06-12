@@ -12,7 +12,7 @@ const parseBoldText = (text: string) => {
   });
 };
 
-const DESC_LIMIT = 180;
+const DESC_LIMIT = 300;
 
 const Projects = () => {
   const [activeFilter, setActiveFilter] = useState<ProjectCategory | 'All'>('All');
@@ -100,7 +100,7 @@ const Projects = () => {
                     <img
                       src={project.thumbnailUrl}
                       alt={project.title}
-                      style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'grayscale(15%)' }}
+                      style={{ width: '100%', height: '100%', objectFit: 'contain', filter: 'grayscale(15%)' }}
                       loading="lazy"
                     />
                   ) : (
@@ -145,7 +145,7 @@ const Projects = () => {
                   </div>
 
                   {/* Description */}
-                  <div style={{ fontSize: 'var(--text-xs)', color: 'var(--text-secondary)', lineHeight: 1.7, marginBottom: '1rem' }}>
+                  <div style={{ fontSize: 'var(--text-xs)', color: 'var(--text-secondary)', lineHeight: 1.7, marginBottom: '1rem', whiteSpace: 'pre-wrap' }}>
                     {expandedDescriptions.has(project.id) || project.description.length <= DESC_LIMIT ? (
                       <>{parseBoldText(project.description)}</>
                     ) : (

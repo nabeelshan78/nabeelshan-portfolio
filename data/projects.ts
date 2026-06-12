@@ -22,21 +22,37 @@ export interface Project {
 
 export const projects: Project[] = [
   {
-    id: 'rlhf-pipeline',
-    title: 'Reinforcement Learning from Human Feedback Pipeline',
-    description: 'Implemented a complete 3-stage RLHF pipeline (SFT, RM, PPO) to align a GPT-2 model. Supervised Fine-Tuning achieved a 202% ROUGE-2 increase over baseline. The Reward Model, trained on 33k preference pairs, achieved 97.9% accuracy. Proximal Policy Optimization (PPO) resulted in a 54% preference score lift compared to the SFT-only model. Conducted comparative analysis of full-parameter versus PEFT (QLoRA) tuning methods.',
-    techStack: ['RLHF', 'PPO', 'Reward Modeling', 'SFT', 'LLMs', 'Python', 'PyTorch', 'TRL', 'QLoRA'],
-    category: 'LLM Alignment & RLHF',
-    githubLink: 'https://github.com/nabeelshan78/reinforcement-learning-human-feedback-scratch',
-    liveDemoLink: 'https://huggingface.co/spaces/nabeelshan/Rlhf-Gpt2-Demo',
-    metrics: [
-      { label: 'ROUGE-2 Δ', value: '+202%' },
-      { label: 'RM Acc', value: '97.9%' },
-      { label: 'PPO Δ', value: '+54%' },
-    ],
-    featured: true,
-    year: 2025,
-  },
+  "id": "rlhf-pipeline",
+  "title": "RLHF Pipeline: SFT, Reward Modeling & PPO",
+  "description": "Engineered a complete, end-to-end **Reinforcement Learning from Human Feedback (RLHF)** pipeline to align  a **GPT-2** language model with human preference distributions. This project serves as a rigorous, methodology-focused reproduction of the core alignment frameworks driving modern frontier models.\n\nThe architecture strictly implements a three-stage process utilizing **PyTorch**, **TRL**, and **PEFT**. It initiates with **Supervised Fine-Tuning (SFT)** via both full-parameter tuning and **QLoRA**, followed by the training of a distinct **Reward Model (RM)** on pairwise human preference datasets. The final phase leverages **Proximal Policy Optimization (PPO)**, employing a KL-divergence penalty to directly optimize the generative policy against the learned scalar reward signal without inducing catastrophic forgetting.\n\nEmpirical validation demonstrated exceptional convergence across all stages. The localized Reward Model achieved a **98% accuracy** in human preference classification (up from an 18% baseline). Subsequent PPO policy updates yielded a **+54% improvement** in average reward scores over the SFT baseline, while the final aligned model maintained a **+183% ROUGE-2 increase** over the raw base model, successfully balancing preference alignment with linguistic coherence." ,
+  "techStack": [
+    "PyTorch",
+    "PPO",
+    "PEFT/QLoRA",
+    "TRL",
+    "RLHF"
+  ],
+  "category": "LLM Alignment & RLHF",
+  "githubLink": "https://github.com/nabeelshan78/reinforcement-learning-human-feedback-scratch",
+  "liveDemoLink": "https://huggingface.co/spaces/nabeelshan/Rlhf-Gpt2-Demo",
+  "thumbnailUrl": "thumbnails/rlhf-pipeline_average_reward.png",
+  "metrics": [
+    {
+      "label": "RM Acc",
+      "value": "98%"
+    },
+    {
+      "label": "Reward Gain",
+      "value": "+54%"
+    },
+    {
+      "label": "ROUGE-2 Boost",
+      "value": "+183%"
+    }
+  ],
+  "featured": true,
+  "year": 2025
+},
   {
     id: 'rag-pipeline',
     title: 'Multi-Stage Routing RAG Architecture',

@@ -100,7 +100,7 @@ const Projects = () => {
                     <img
                       src={project.thumbnailUrl}
                       alt={project.title}
-                      style={{ width: '100%', height: '100%', objectFit: 'contain', filter: 'grayscale(15%)' }}
+                      style={{ width: '100%', height: '100%', objectFit: 'contain', filter: 'grayscale(15%)', backgroundColor: 'white' }}
                       loading="lazy"
                     />
                   ) : (

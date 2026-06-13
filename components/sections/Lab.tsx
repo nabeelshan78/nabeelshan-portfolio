@@ -14,6 +14,13 @@ const labProjects = [
     link: 'https://github.com/nabeelshan78/gpt-forge-from-scratch-transformer',
   },
   {
+  "title": "Transformer Adaptation Playbook",
+  "description": "From-scratch implementation of parameter-efficient adaptation strategies for Transformer architectures. Includes custom bottleneck adapters, manual low-rank matrix decompositions (LoRA). Empirically validated against full fine-tuning baselines.",
+  "framework": "PyTorch",
+  "params": ">96% Param Drop",
+  "link": "https://github.com/nabeelshan78/Transformer-Adaptation-Playbook"
+  },
+  {
     "title": "Deep Neural Network from Scratch",
     "description": "First-principles NumPy implementation of a fully vectorized multi-layer deep-NN. Features manual forward / backward propagation, advanced optimizers (Adam, RMSprop), and regularization. Empirically validated via optimization ablation studies.",
     "framework": "NumPy",

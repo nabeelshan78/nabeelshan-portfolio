@@ -1,4 +1,4 @@
-export type ProjectCategory = 'LLM Alignment & RLHF' | 'First-Principles' | 'NLP & Sequence Models' | 'Computer Vision' | 'Applied ML' | 'Client Work';
+export type ProjectCategory = 'LLM Alignment & RLHF' | 'First-Principles' | 'NLP & Sequence Models' | 'Computer Vision' | 'Applied ML';
 
 export interface ProjectMetric {
   label: string;
@@ -24,7 +24,7 @@ export const projects: Project[] = [
   {
   "id": "rlhf-pipeline",
   "title": "RLHF Pipeline: SFT, Reward Modeling & PPO",
-  "description": "Engineered a complete, end-to-end **Reinforcement Learning from Human Feedback (RLHF)** pipeline to align  a **GPT-2** language model with human preference distributions. This project serves as a rigorous, methodology-focused reproduction of the core alignment frameworks driving modern frontier models.\n\nThe architecture strictly implements a three-stage process utilizing **PyTorch**, **TRL**, and **PEFT**. It initiates with **Supervised Fine-Tuning (SFT)** via both full-parameter tuning and **QLoRA**, followed by the training of a distinct **Reward Model (RM)** on pairwise human preference datasets. The final phase leverages **Proximal Policy Optimization (PPO)**, employing a KL-divergence penalty to directly optimize the generative policy against the learned scalar reward signal without inducing catastrophic forgetting.\n\nEmpirical validation demonstrated exceptional convergence across all stages. The localized Reward Model achieved a **98% accuracy** in human preference classification (up from an 18% baseline). Subsequent PPO policy updates yielded a **+54% improvement** in average reward scores over the SFT baseline, while the final aligned model maintained a **+183% ROUGE-2 increase** over the raw base model, successfully balancing preference alignment with linguistic coherence." ,
+  "description": "Engineered a complete, end-to-end **Reinforcement Learning from Human Feedback (RLHF)** pipeline to align  a **GPT-2** language model with human preference distributions. This project serves as a rigorous, methodology-focused reproduction of the core alignment frameworks driving modern frontier models.\n\nThe architecture strictly implements a 3-stage process. It initiates with **Supervised Fine-Tuning (SFT)** via both full-parameter tuning and **QLoRA**, followed by training a distinct **Reward Model (RM)** on pairwise human preference datasets. The final phase leverages **Proximal Policy Optimization (PPO)**, employing a KL-divergence penalty to directly optimize the generative policy without inducing catastrophic forgetting.\n\nEmpirical validation demonstrated exceptional convergence across all stages. The Reward Model achieved a **98% accuracy** in preference classification (up from an 18% baseline). Subsequent PPO policy updates yielded a **+54% improvement** in average reward scores over the SFT baseline, while the final aligned model maintained a **+183% ROUGE-2 increase** over the raw base model, successfully balancing preference alignment with linguistic coherence." ,
   "techStack": [
     "PyTorch",
     "PPO",
@@ -53,105 +53,141 @@ export const projects: Project[] = [
   "featured": true,
   "year": 2025
 },
+{
+  "id": "safe-llm-adaptation-peft-rlhf",
+  "title": "FLAN-T5 Adaptation Benchmarks: SFT, LoRA & PPO",
+  "description": "Executed an empirical study on adapting **Google's FLAN-T5** for dialogue summarization to evaluate trade-offs in computational overhead and output quality. The project benchmarks four paradigms: In-Context Learning, Supervised Fine-Tuning (SFT), Parameter-Efficient Fine-Tuning (PEFT), and Reinforcement Learning from Human Feedback (RLHF).\n\nContrasted a full-parameter update (**247.5M parameters**) against an efficient **LoRA** strategy that injects rank-32 matrices, reducing the trainable footprint to just **3.5M parameters**. To enforce behavioral alignment, an **RLHF** pipeline was deployed using **PPO**, leveraging a **RoBERTa**-based hate speech classifier as a dense reward signal with a KL-divergence penalty to actively penalize toxic generations.\n\nThe comparative evaluation yielded compelling quantitative insights. **PEFT (LoRA)** captured **97% of full SFT performance** (**0.408 ROUGE-1** score) while training only **1.4% of the parameters** - a staggering 70x reduction in trainable weights. Furthermore, the final PPO-aligned policy successfully steered the generative behavior toward safer outputs, achieving a **9.2% reduction in mean toxicity** without compromising summarization fidelity.",
+  "techStack": [
+    "FLAN-T5",
+    "LoRA/PEFT",
+    "PyTorch",
+    "PPO (TRL)"
+  ],
+  "category": "LLM Alignment & RLHF",
+  "githubLink": "https://github.com/nabeelshan78/safe-llm-adaptation-peft-rlhf",
+  "liveDemoLink": "https://flant5-icl-sft-peft-rlhf-8rx4znwnt8g9yjctbawwve.streamlit.app/",
+  // "videoEmbedUrl": "https://www.youtube.com/embed/h-0aYdylfRY?autoplay=1&mute=1&loop=1",
+  "videoEmbedUrl": "https://www.youtube.com/embed/h-0aYdylfRY?autoplay=1&mute=1&loop=1&playlist=h-0aYdylfRY&vq=hd1080&rel=0",
+
+  "metrics": [
+    { "label": "ROUGE-1", "value": "0.408" },
+    { "label": "Param Drop", "value": "98%+" },
+    { "label": "Toxicity Δ", "value": "−9.2%" }
+  ],
+  "featured": true,
+  "year": 2025
+},
+{
+  "id": "transformer-scratch-vs-distilbert",
+  "title": "Custom Transformer vs. Fine-Tuned DistilBERT",
+  "description": "Implemented an end-to-end NLP pipeline to evaluate the trade-offs between first-principles deep learning and modern transfer learning. The project contrasts a custom from-scratch Transformer against a fine-tuned foundation model on the **AG News** benchmark, culminating in a cloud deployment.         \n\nBuilt a custom **PyTorch** Transformer Encoder from the ground up, featuring manual Positional Encodings and an optimized sequence collator to minimize padding overhead. To establish a high-performance baseline, **DistilBERT** was fine-tuned using the **Hugging Face** ecosystem, and deployed the inference engine as a web application.\n\nThe first-principles Transformer achieved a robust **90.32% test accuracy** via a 160-epoch training regimen with dynamic optimizer scheduling. Conversely, the fine-tuned DistilBERT secured a superior **94.79% accuracy** with **50x less training time**, perfectly bridging theoretical architectural design with high-efficiency applied ML deployment.",
+  "techStack": [
+    "PyTorch",
+    "Hugging Face",
+    "Transformers",
+    "MLOps"
+  ],
+  "category": "NLP & Sequence Models",
+  "githubLink": "https://github.com/nabeelshan78/NLP-From-Scratch-to-Deployment",
+  "liveDemoLink": "https://huggingface.co/spaces/nabeelshan/distilbert-agnews-classifier",
+  "thumbnailUrl": "thumbnails/nlp_distilbert.png",
+  "metrics": [
+    {
+      "label": "DistilBERT Acc",
+      "value": "94.79%"
+    },
+    {
+      "label": "Custom Acc",
+      "value": "90.32%"
+    },
+    {
+      "label": "Training Speedup",
+      "value": "50x"
+    }
+  ],
+  "featured": true,
+  "year": 2025
+},
+{
+  "id": "attention-based-nmt-from-scratch",
+  "title": "Attention-Based NMT: Seq2Seq Architecture",
+  // "description": "Designed a complete **Neural Machine Translation (NMT)** system from the ground up for English-to-French translation. Bypassing pre-trained models, this project demonstrates a fundamental mastery of sequence modeling by implementing the entire architecture completely from scratch.                    \n\nHighly customized **Sequence-to-Sequence (Seq2Seq)** model implemented in **TensorFlow**. The architecture features a **Bidirectional LSTM Encoder**, a mathematical **Additive Attention Mechanism** for dynamic sequence alignment, and a custom **LSTM Decoder**. The 23.6M parameter model was optimized using custom data pipelines and **Beam Search** decoding for high-fidelity inference.\n\nThe architecture successfully learned complex bilingual mappings, achieving exact-match accuracy on conversational phrases. The trained model was deployed as a web application.",
+  "description": "Designed a complete **Neural Machine Translation (NMT)** system from the ground up for English-to-French translation. Bypassing pre-trained models, this project demonstrates a fundamental mastery of sequence modeling by implementing a highly customized **Sequence-to-Sequence (Seq2Seq)** architecture completely from scratch in **TensorFlow**.\n\nThe 23.6M parameter model features a **Bidirectional LSTM Encoder**, a mathematical **Additive Attention Mechanism** for dynamic sequence alignment, and an **LSTM Decoder** utilizing **Beam Search**. Achieving exact-match accuracy on conversational phrases, the trained model was successfully deployed as a real-time web application.",
+  "techStack": [
+    "TensorFlow",
+    "Bi-LSTM",
+    "Additive Attention"
+  ],
+  "category": "NLP & Sequence Models",
+  "githubLink": "https://github.com/nabeelshan78/real-time-neural-machine-translation",
+  "liveDemoLink": "https://attention-based-nmt-rwlnsz6dvpdacpyj4gqob2.streamlit.app/",
+  "thumbnailUrl": "thumbnails/encoder_decoder_attention_diagram.png",
+  "metrics": [
+    {
+      "label": "Parameters",
+      "value": "23.6M"
+    },
+    {
+      "label": "Decoding",
+      "value": "Beam Search"
+    }
+  ],
+  "featured": true,
+  "year": 2024
+},
+{
+  "id": "mobilenetv2-finetuning-pipeline",
+  "title": "MobileNetV2 Progressive Transfer Learning",
+  // "description": "Engineered an end-to-end binary image classification pipeline using **MobileNetV2** to systematically evaluate the impact of progressive transfer learning techniques. This project moves beyond simple out-of-the-box model application, focusing on the rigorous mechanics of freezing internal representations, applying data augmentation, and unfreezing specific network depths to optimize convergence on a limited-data task.\n\nThe technical architecture utilized a pre-trained MobileNetV2 base with the classification head removed. A custom fully connected head was implemented featuring **GlobalAveragePooling2D**, spatial **Dropout (0.2)** regularization, and a Sigmoid activation. The training protocol was executed in two distinct phases: an initial feature extraction phase with a frozen base model, followed by a targeted fine-tuning phase where the top internal layers (post-layer 120) were unfrozen and optimized using a low-learning-rate **Adam** optimizer to prevent catastrophic forgetting of the ImageNet weights.\n\nEmpirical validation confirmed the efficacy of this two-stage approach. Following the targeted fine-tuning phase, the model achieved a **92.31% Validation Accuracy** and a **93.75% Recall** score. This demonstrated a deep understanding of CNN feature hierarchies and the ability to adapt large-scale vision architectures to specialized, low-resource domains.",
+  "description": "Built an end-to-end binary image classification pipeline to evaluate progressive transfer learning techniques using **MobileNetV2**. The architecture features a pre-trained base with a custom fully connected head utilizing **GlobalAveragePooling2D**, spatial **Dropout (0.2)**, and Sigmoid activation to optimize convergence on a limited-data task.\n\nThe training protocol executed a two-phase approach: initial feature extraction with a frozen base, followed by targeted fine-tuning where top internal layers (post-layer 120) were unfrozen. Optimized with a low-learning-rate **Adam** optimizer to prevent catastrophic forgetting, the model achieved an impressive **92.31% Validation Accuracy** and **93.75% Recall**, successfully adapting a large-scale vision architecture to a specialized, low-resource domain.",
+  "techStack": [
+    "TensorFlow",    
+    "CNNs",
+    "Computer Vision"
+  ],
+  "category": "Computer Vision",
+  "githubLink": "https://github.com/nabeelshan78/mobilenetv2-finetune-classification",
+  "liveDemoLink": "",
+  "thumbnailUrl": "thumbnails/mobilenet_v2.png",
+  "metrics": [
+    {
+      "label": "Val Accuracy",
+      "value": "92.31%"
+    },
+    {
+      "label": "Recall",
+      "value": "93.75%"
+    },
+    {
+      "label": "Precision",
+      "value": "90.91%"
+    }
+  ],
+  "featured": false,
+  "year": 2025
+},
   {
-    id: 'rag-pipeline',
-    title: 'Multi-Stage Routing RAG Architecture',
-    description: 'Developed a Retrieval-Augmented Generation system featuring an intelligent multi-stage routing mechanism for intent classification. The architecture routes queries between technical and FAQ pathways, reducing inference token consumption by 40%. Achieved <2s latency and >95% routing accuracy. Observability integrated via Arize Phoenix and OpenTelemetry over a Weaviate vector database (44,000+ embeddings).',
-    techStack: ['RAG', 'LLMs', 'MLOps', 'Arize Phoenix', 'OpenTelemetry', 'Weaviate', 'Python', 'Llama 3.1'],
-    category: 'LLM Alignment & RLHF',
-    githubLink: 'https://github.com/nabeelshan78/fashion-advanced-rag-pipeline-phoenix',
-    metrics: [
-      { label: 'Token Reduction', value: '40%' },
-      { label: 'Latency', value: '<2s' },
-      { label: 'Routing Acc', value: '>95%' },
-    ],
-    featured: true,
-    year: 2025,
-  },
-  {
-    id: 'llm-finetuning',
-    title: 'LLM Adaptation Techniques: ICL, SFT, PEFT, RLHF',
-    description: 'Comparative study of adaptation methods utilizing FLAN-T5 for abstractive summarization. Benchmarked In-Context Learning, full Supervised Fine-Tuning (247.5M params), and PEFT (LoRA). LoRA achieved 97% of full SFT performance utilizing only 1.4% of trainable parameters. RLHF via PPO and a RoBERTa reward model decreased toxicity metrics by 9.2%.',
-    techStack: ['LLMs', 'RLHF', 'SFT', 'LoRA', 'PPO', 'Python', 'PyTorch', 'Hugging Face', 'FLAN-T5'],
-    category: 'LLM Alignment & RLHF',
-    githubLink: 'https://github.com/nabeelshan78/flanT5-ICL-SFT-PEFT-RLHF',
-    liveDemoLink: 'https://flant5-icl-sft-peft-rlhf-8rx4znwnt8g9yjctbawwve.streamlit.app/',
-    videoEmbedUrl: 'https://www.youtube.com/embed/xroNqa6lkn8?autoplay=1&mute=1&loop=1&playlist=xroNqa6lkn8',
-    metrics: [
-      { label: 'ROUGE Δ', value: '+18.86%' },
-      { label: 'Params Tuned', value: '1.4%' },
-      { label: 'Toxicity Δ', value: '-9.2%' },
-    ],
-    featured: true,
-    year: 2025,
-  },
-  {
-    id: 'transformer-classifier',
-    title: 'Transformer Encoder vs. DistilBERT Fine-Tuning',
-    description: 'Empirical comparison of text classification efficacy using a first-principles PyTorch Transformer Encoder (90.32% accuracy) against a fine-tuned DistilBERT model (94.79% accuracy). Evaluated on standard benchmark datasets.',
-    techStack: ['Python', 'PyTorch', 'Transformer', 'DistilBERT', 'Transfer Learning'],
-    category: 'First-Principles',
-    githubLink: 'https://github.com/nabeelshan78/Transformer-AGNews-Classifier',
-    thumbnailUrl: 'distilbert.gif',
-    liveDemoLink: 'https://huggingface.co/spaces/nabeelshan/distilbert-agnews-classifier',
-    metrics: [
-      { label: 'Custom Acc', value: '90.32%' },
-      { label: 'DistilBERT Acc', value: '94.79%' },
-    ],
-    year: 2024,
-  },
-  {
-    id: 'gpt-forge',
-    title: 'Autoregressive Transformer Architecture',
-    description: 'Implementation of a GPT decoder-only architecture utilizing PyTorch. Features multi-head causal self-attention, positional embeddings, custom tokenization, and a bespoke training loop. Models (22M and 52M parameters) were trained and evaluated on NVIDIA A10G infrastructure.',
-    techStack: ['PyTorch', 'Python', 'Transformer', 'Causal Attention', 'Autoregressive Inference'],
-    category: 'First-Principles',
-    githubLink: 'https://github.com/nabeelshan78/gpt-forge-from-scratch-transformer',
-    metrics: [
-      { label: 'Parameters', value: '52M' },
-    ],
-    featured: true,
-    year: 2025,
-  },
-  {
-    id: 'peft-playbook',
-    title: 'Parameter-Efficient Fine-Tuning Mechanisms',
-    description: 'Implementation and comparative analysis of Adapters and LoRA from scratch in PyTorch. Results demonstrated that PEFT approaches match full fine-tuning accuracy (~86%) while reducing tunable parameters by >96% across BERT, GPT-2, and OPT architectures.',
-    techStack: ['Python', 'PyTorch', 'PEFT', 'Adapters', 'LoRA'],
-    category: 'LLM Alignment & RLHF',
-    githubLink: 'https://github.com/nabeelshan78/Transformer-Adaptation-Playbook',
-    metrics: [
-      { label: 'PEFT Acc', value: '~86%' },
-      { label: 'Param Reduction', value: '>96%' },
-    ],
-    featured: true,
-    year: 2025,
-  },
-  {
-    id: 'nmt-attention',
-    title: 'Attention-Based Neural Machine Translation',
-    description: 'Seq2Seq architecture for NMT (English to French) implemented in TensorFlow. Utilizes a Bi-directional LSTM encoder, an LSTM decoder with Additive Attention, and Beam Search decoding yielding a 23.6M parameter model.',
-    techStack: ['Python', 'TensorFlow', 'Seq2Seq', 'Additive Attention', 'Bi-LSTM', 'Beam Search'],
-    category: 'First-Principles',
-    githubLink: 'https://github.com/nabeelshan78/attention-based-nmt',
-    thumbnailUrl: 'Neural MT.jpg',
-    liveDemoLink: 'https://attention-based-nmt-rwlnsz6dvpdacpyj4gqob2.streamlit.app/',
-    videoEmbedUrl: 'https://www.youtube.com/embed/O6M507Ku6qU?autoplay=1&mute=1&loop=1&playlist=O6M507Ku6qU',
-    metrics: [
-      { label: 'Parameters', value: '23.6M' },
-    ],
-    year: 2024,
-  },
-  {
-    id: 'yolov2-detection',
-    title: 'YOLOv2 Object Detection Pipeline',
-    description: 'Object detection pipeline based on YOLOv2 architecture in TensorFlow. Incorporates custom tensor decoding, bounding box regression, and Non-Maximum Suppression (NMS) algorithms.',
-    techStack: ['Python', 'TensorFlow', 'Computer Vision', 'YOLO', 'NMS'],
-    category: 'First-Principles',
-    githubLink: 'https://github.com/nabeelshan78/yolo-object-detection-pipeline',
-    thumbnailUrl: 'cars_pred.png',
-    year: 2024,
-  },
+  "id": "yolo-object-detection-pipeline",
+  "title": "YOLO: Custom Tensor Decoding & NMS",
+  "description": "Engineered an end-to-end object detection pipeline, reconstructing the core mechanics of the **YOLO (You Only Look Once)** architecture from first principles. Rather than relying on high-level APIs, I built a custom predictive head to manually decode complex grid-based output tensors into spatial bounding box coordinates.\n\nThe pipeline incorporates rigorous mathematical post-processing, explicitly calculating Intersection-over-Union (IoU) to apply custom **Non-Maximum Suppression (NMS)** and dynamic probability thresholding. Systematically scaling inputs to a specialized **608x608** tensor space, the framework successfully executes robust multi-class detection across images, outputting highly precise bounding box overlays.",
+  "techStack": [
+    "TensorFlow/Keras",
+    "YOLOv2",
+    "Computer Vision",
+  ],
+  "category": "Computer Vision",
+  "githubLink": "https://github.com/nabeelshan78/yolo-object-detection-pipeline",
+  "liveDemoLink": "",
+  "thumbnailUrl": "thumbnails/yolo_cars_pred.png",
+  "metrics": [
+    {
+      "label": "Algorithm",
+      "value": "Custom NMS"
+    }
+  ],
+  "featured": true,
+  "year": 2025
+},
   {
     id: 'wake-word',
     title: 'Real-Time Wake Word Detection',
@@ -232,16 +268,6 @@ export const projects: Project[] = [
     year: 2024,
   },
   {
-    id: 'cnn-scratch',
-    title: 'CNN Architecture in NumPy',
-    description: 'Implementation of Convolutional Neural Networks utilizing only NumPy primitives. Includes mathematical derivations for 2D Convolutions, Max Pooling, and full backpropagation algorithms.',
-    techStack: ['Python', 'NumPy', 'CNNs', 'Computer Vision', 'Backpropagation'],
-    category: 'First-Principles',
-    githubLink: 'https://github.com/nabeelshan78/cnn-from-scratch-sign-digits',
-    thumbnailUrl: 'Convolution_schematic.gif',
-    year: 2024,
-  },
-  {
     id: 'neural-style-transfer',
     title: 'Neural Style Transfer Optimization',
     description: 'NST pipeline utilizing VGG19 feature extraction. Implements custom content and style loss formulations using tf.GradientTape for gradient descent optimization directly on image pixels.',
@@ -250,47 +276,7 @@ export const projects: Project[] = [
     githubLink: 'https://github.com/nabeelshan78/neural-style-transfer-tf',
     thumbnailUrl: 'style.png',
     year: 2024,
-  },
-  {
-    id: 'mobilenetv2',
-    title: 'MobileNetV2 Transfer Learning',
-    description: 'Evaluation of transfer learning efficacy for binary image classification. Includes feature extraction, fine-tuning methodologies, and data augmentation pipelines.',
-    techStack: ['Python', 'TensorFlow', 'Computer Vision', 'Transfer Learning', 'MobileNetV2'],
-    category: 'Computer Vision',
-    githubLink: 'https://github.com/nabeelshan78/mobilenetv2-finetune-classification',
-    thumbnailUrl: 'alpaca.png',
-    year: 2024,
-  },
-  {
-    id: 'dnn-scratch',
-    title: 'Deep Neural Network in NumPy',
-    description: 'Modular implementation of fully-connected deep neural networks. Includes forward/backward propagation routines, diverse optimizers (Adam, RMSProp), initialization schemas, and regularization.',
-    techStack: ['Python', 'NumPy', 'Neural Networks', 'Optimization'],
-    category: 'First-Principles',
-    githubLink: 'https://github.com/nabeelshan78/deep-nn-from-scratch',
-    thumbnailUrl: 'deep_nn.jpg',
-    year: 2024,
-  },
-  {
-    id: 'dino-rnn',
-    title: 'Character-Level RNN Generation',
-    description: 'Recurrent Neural Network constructed in NumPy. Implements Backpropagation Through Time (BPTT), gradient clipping, and temperature scaling for generative inference.',
-    techStack: ['Python', 'NumPy', 'RNN', 'Generative Models', 'BPTT'],
-    category: 'First-Principles',
-    githubLink: 'https://github.com/nabeelshan78/char-rnn-dino-name-generator',
-    thumbnailUrl: 'dino_2.png',
-    year: 2024,
-  },
-  {
-    id: 'vanilla-rnn',
-    title: 'Vanilla RNN Architecture',
-    description: 'Fundamental Recurrent Neural Network implementation using NumPy matrices. Demonstrates sequential data processing, cross-entropy loss calculation, and BPTT.',
-    techStack: ['Python', 'NumPy', 'RNN', 'NLP', 'BPTT'],
-    category: 'First-Principles',
-    githubLink: 'https://github.com/nabeelshan78/vanilla-rnn-from-scratch',
-    thumbnailUrl: 'rnn_image.png',
-    year: 2024,
-  },
+  }
 ];
 
-export const allCategories: ProjectCategory[] = ['LLM Alignment & RLHF', 'First-Principles', 'NLP & Sequence Models', 'Computer Vision', 'Applied ML', 'Client Work'];
+export const allCategories: ProjectCategory[] = ['LLM Alignment & RLHF', 'First-Principles', 'NLP & Sequence Models', 'Computer Vision', 'Applied ML'];

@@ -1,17 +1,44 @@
-
-import React from 'react';
-import { LinkedinIcon, GithubIcon, MailIcon } from './icons/SocialIcons';
-
-const Footer: React.FC = () => {
+const Footer = () => {
   return (
-    <footer className="bg-secondary">
-      <div className="container mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center text-medium">
-        <div className="flex justify-center space-x-6 mb-4">
-           <a href="mailto:nabeelshan468@gmail.com" className="text-medium hover:text-accent transition-colors duration-200"><MailIcon /></a>
-           <a href="https://linkedin.com/in/nabeelshan" target="_blank" rel="noopener noreferrer" className="text-medium hover:text-accent transition-colors duration-200"><LinkedinIcon /></a>
-           <a href="https://github.com/nabeelshan78" target="_blank" rel="noopener noreferrer" className="text-medium hover:text-accent transition-colors duration-200"><GithubIcon /></a>
+    <footer style={{
+      padding: '2.5rem 0',
+      borderTop: '1px solid var(--border-subtle)',
+      background: 'var(--bg-primary)',
+    }}>
+      <div className="container" style={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        flexWrap: 'wrap',
+        gap: '1rem',
+      }}>
+        <p className="text-mono" style={{ fontSize: 'var(--text-xs)', color: 'var(--text-tertiary)' }}>
+          © {new Date().getFullYear()} Nabeel Shan
+        </p>
+        <div style={{ display: 'flex', gap: '1.5rem' }}>
+          <a
+            href="https://github.com/nabeelshan78"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ color: 'var(--text-tertiary)', fontSize: 'var(--text-xs)', transition: 'color 120ms ease' }}
+          >
+            GitHub
+          </a>
+          <a
+            href="https://linkedin.com/in/nabeelshan"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ color: 'var(--text-tertiary)', fontSize: 'var(--text-xs)', transition: 'color 120ms ease' }}
+          >
+            LinkedIn
+          </a>
+          <a
+            href="mailto:nabeelshan468@gmail.com"
+            style={{ color: 'var(--text-tertiary)', fontSize: 'var(--text-xs)', transition: 'color 120ms ease' }}
+          >
+            Email
+          </a>
         </div>
-        <p>&copy; {new Date().getFullYear()} Nabeel Shan. All Rights Reserved.</p>
       </div>
     </footer>
   );

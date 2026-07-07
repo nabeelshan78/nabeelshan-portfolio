@@ -1,8 +1,10 @@
-
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { HashRouter } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import App from './App';
+import BlogIndex from './components/blog/BlogIndex';
+import BlogPost from './components/blog/BlogPost';
+import './index.css';
 
 const rootElement = document.getElementById('root');
 if (!rootElement) {
@@ -12,8 +14,12 @@ if (!rootElement) {
 const root = ReactDOM.createRoot(rootElement);
 root.render(
   <React.StrictMode>
-    <HashRouter>
-      <App />
-    </HashRouter>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<App />} />
+        <Route path="/blog" element={<BlogIndex />} />
+        <Route path="/blog/:slug" element={<BlogPost />} />
+      </Routes>
+    </BrowserRouter>
   </React.StrictMode>
 );

@@ -6,62 +6,58 @@ const About = () => {
         <span className="section-label">Background</span>
         <h2 className="section-title">About</h2>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '2.5rem', marginBottom: '3.5rem' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '2.5rem', marginBottom: '3.5rem' }}>
           <div>
+            {/* Paragraph 1: The Research & Philosophy */}
             <p style={{ color: 'var(--text-secondary)', marginBottom: '1rem', lineHeight: 1.8 }}>
-              I am an AI/ML engineer and researcher focused on large language models, alignment methods, and agentic systems. My approach centers on implementing architectures from first principles — constructing Transformers, LSTMs, CNNs, and RL pipelines from the ground up using PyTorch and NumPy — not as exercises, but as a verification methodology against published research.
+              My research focuses on advancing Large Language Models (LLMs) through computationally efficient alignment methodologies, Reinforcement Learning (RLHF), test-time compute optimizations, and autonomous agentic systems. Rather than relying on high-level APIs, my engineering philosophy is rooted in <strong>first-principles</strong>. I build complex deep learning architectures - from foundational Transformers to end-to-end PPO pipelines - completely from scratch in PyTorch. I treat raw implementation not merely as a coding exercise, but as the most effective way to deeply internalize the complex mathematical mechanics detailed in academic literature.
             </p>
+            
+            {/* Paragraph 2: The Evidence & Momentum */}
+            <p style={{ color: 'var(--text-secondary)', marginBottom: '1rem', lineHeight: 1.8 }}>
+              Currently pursuing a B.E. in Software Engineering at the National University of Sciences and Technology (NUST), my academic momentum is heavily driven by applied research. Most recently, I architected deterministic verification guardrails as a Contract AI Engineer at DeepDocs AI. For Summer 2026, I have been selected as a fully-funded MITACS Globalink Research Intern at the University of Calgary, where I will be engineering synthetic data pipelines and fine-tuning open-source LLMs via LoRA and Knowledge Distillation.
+            </p>
+
+            {/* Paragraph 3: The Ambition (The Call to Action) */}
             <p style={{ color: 'var(--text-secondary)', lineHeight: 1.8 }}>
-              Currently pursuing a B.E. in Software Engineering at the National University of Sciences and Technology (NUST), with an expected graduation in May 2027. I am an incoming MITACS Globalink Research Intern at the University of Calgary for Summer 2026. Previously, I served as an AI Engineer at DeepDocs AI, working on NLP-driven document processing.
+              My ultimate objective is to push the frontier of secure, aligned, and highly capable Generative AI. I am actively preparing to transition into a thesis-based Master's program in Computer Science or Artificial Intelligence for <strong>Fall 2027</strong>, and I am currently seeking advanced research opportunities and graduate lab placements where I can contribute to the next generation of LLM alignment and agentic orchestration.
             </p>
           </div>
         </div>
 
-        {/* Research Interests */}
+                {/* Research Interests */}
         <h3 style={{ fontSize: 'var(--text-lg)', marginBottom: '1.5rem', color: 'var(--text-heading)' }}>Research Interests</h3>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1rem', marginBottom: '3.5rem' }}>
 
+          {/* Pillar 1 */}
           <div className="card" style={{ borderLeft: '2px solid var(--accent)' }}>
             <h4 style={{ fontSize: 'var(--text-sm)', marginBottom: '0.625rem', color: 'var(--text-heading)', fontWeight: 600 }}>
               LLM Alignment &amp; Preference Learning
             </h4>
             <p style={{ fontSize: 'var(--text-sm)', color: 'var(--text-secondary)', lineHeight: 1.7, marginBottom: '0.75rem' }}>
-              Preference optimization methods (DPO, RLHF, GRPO, ORPO) for steering language model behavior. Alignment techniques that scale to resource-constrained settings.
+              Engineering mathematically rigorous preference optimization pipelines to align language model behavior with human intent. Focused on applying advanced Reinforcement Learning (RLHF, PPO, GRPO) and direct optimization (DPO, ORPO) in complex, resource-constrained environments.
             </p>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.375rem' }}>
-              {['RLHF', 'DPO', 'PPO', 'GRPO', 'ORPO', 'Reward Modeling'].map(k => (
-                <span key={k} className="tag">{k}</span>
-              ))}
-            </div>
           </div>
 
+          {/* Pillar 2 */}
           <div className="card" style={{ borderLeft: '2px solid var(--accent)' }}>
             <h4 style={{ fontSize: 'var(--text-sm)', marginBottom: '0.625rem', color: 'var(--text-heading)', fontWeight: 600 }}>
-              LLM Reasoning &amp; Efficiency
+              LLM Reasoning &amp; Test-Time Compute
             </h4>
             <p style={{ fontSize: 'var(--text-sm)', color: 'var(--text-secondary)', lineHeight: 1.7, marginBottom: '0.75rem' }}>
-              Reasoning capabilities of large language models and methods to improve inference efficiency. Model compression, parameter-efficient adaptation, and distillation.
+              Maximizing model reasoning capabilities through advanced Test-Time Compute scaling and structural heuristics. Researching parameter-efficient adaptation (LoRA, PEFT) and knowledge distillation to aggressively optimize inference overhead.
             </p>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.375rem' }}>
-              {['Chain-of-Thought', 'LoRA', 'QLoRA', 'PEFT', 'SFT', 'Distillation'].map(k => (
-                <span key={k} className="tag">{k}</span>
-              ))}
-            </div>
           </div>
 
+          {/* Pillar 3 */}
           <div className="card" style={{ borderLeft: '2px solid var(--accent)' }}>
             <h4 style={{ fontSize: 'var(--text-sm)', marginBottom: '0.625rem', color: 'var(--text-heading)', fontWeight: 600 }}>
-              Agentic AI Systems
+              Autonomous Agentic Systems
             </h4>
             <p style={{ fontSize: 'var(--text-sm)', color: 'var(--text-secondary)', lineHeight: 1.7, marginBottom: '0.75rem' }}>
-              Multi-agent orchestration frameworks. Research on tool-use, planning, and autonomous decision-making in LLM-based agent systems.
+              Architecting stateful, fault-tolerant multi-agent orchestration frameworks. Investigating autonomous tool-use, cyclical planning logic, and deterministic verification engines to strictly mitigate LLM hallucinations in production deployments.
             </p>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.375rem' }}>
-              {['Multi-Agent', 'Tool Use', 'Planning', 'Orchestration', 'RAG'].map(k => (
-                <span key={k} className="tag">{k}</span>
-              ))}
-            </div>
           </div>
 
         </div>
@@ -76,7 +72,7 @@ const About = () => {
               Languages &amp; Frameworks
             </h4>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.375rem' }}>
-              {['Python', 'PyTorch', 'TensorFlow', 'NumPy', 'Scikit-learn', 'Pandas', 'TypeScript'].map(s => (
+              {['Python', 'PyTorch', 'TensorFlow', 'LangGraph', 'LangChain', 'NumPy', 'Scikit-learn'].map(s => (
                 <span key={s} className="tag">{s}</span>
               ))}
             </div>
@@ -87,7 +83,7 @@ const About = () => {
               LLMs &amp; NLP
             </h4>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.375rem' }}>
-              {['Transformers', 'Hugging Face', 'TRL', 'RLHF', 'DPO', 'PPO', 'SFT', 'PEFT', 'LoRA', 'RAG'].map(s => (
+              {['Transformers', 'Hugging Face', 'SFT', 'Distillation', 'RLHF', 'DPO', 'PPO', 'PEFT/LoRA', 'RAG'].map(s => (
                 <span key={s} className="tag">{s}</span>
               ))}
             </div>
@@ -98,7 +94,7 @@ const About = () => {
               Computer Vision
             </h4>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.375rem' }}>
-              {['CNNs', 'ResNet', 'U-Net', 'YOLO', 'FaceNet', 'Semantic Segmentation'].map(s => (
+              {['CNNs', 'ResNet', 'U-Net', 'YOLO', 'FaceNet', 'Segmentation'].map(s => (
                 <span key={s} className="tag">{s}</span>
               ))}
             </div>

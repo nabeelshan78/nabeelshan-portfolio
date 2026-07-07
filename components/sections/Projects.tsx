@@ -20,7 +20,7 @@ const Projects = () => {
 
   const filteredProjects = useMemo(() => {
     if (activeFilter === 'All') return projects;
-    return projects.filter((p) => p.category === activeFilter);
+    return projects.filter((p) => p.categories.includes(activeFilter as ProjectCategory));
   }, [activeFilter]);
 
   const toggleDescription = (id: string) => {
@@ -123,7 +123,7 @@ const Projects = () => {
                   {/* Category + Year */}
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.625rem' }}>
                     <span className="text-mono" style={{ fontSize: '0.6875rem', color: 'var(--text-tertiary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                      {project.category}
+                      {activeFilter === 'All' ? project.categories[0] : activeFilter}
                     </span>
                     <span className="text-mono" style={{ fontSize: '0.6875rem', color: 'var(--text-tertiary)' }}>
                       {project.year}

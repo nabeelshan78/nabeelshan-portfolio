@@ -1,4 +1,4 @@
-export type ProjectCategory = 'LLM Alignment & RLHF' | 'First-Principles' | 'NLP & Sequence Models' | 'Computer Vision' | 'Applied ML';
+export type ProjectCategory = 'Generative AI & LLMs' | 'RAG & Agentic AI' | 'Natural Language Processing' | 'Computer Vision';
 
 export interface ProjectMetric {
   label: string;
@@ -10,7 +10,7 @@ export interface Project {
   title: string;
   description: string;
   techStack: string[];
-  category: ProjectCategory;
+  categories: ProjectCategory[];
   githubLink: string;
   liveDemoLink?: string;
   videoEmbedUrl?: string;
@@ -32,7 +32,7 @@ export const projects: Project[] = [
     "TRL",
     "RLHF"
   ],
-  "category": "LLM Alignment & RLHF",
+  "categories": ["Generative AI & LLMs", "Natural Language Processing"],
   "githubLink": "https://github.com/nabeelshan78/reinforcement-learning-human-feedback-scratch",
   "liveDemoLink": "https://huggingface.co/spaces/nabeelshan/Rlhf-Gpt2-Demo",
   "thumbnailUrl": "thumbnails/rlhf-pipeline_average_reward.png",
@@ -63,7 +63,7 @@ export const projects: Project[] = [
     "PyTorch",
     "PPO (TRL)"
   ],
-  "category": "LLM Alignment & RLHF",
+  "categories": ["Generative AI & LLMs", "Natural Language Processing"],
   "githubLink": "https://github.com/nabeelshan78/safe-llm-adaptation-peft-rlhf",
   "liveDemoLink": "https://flant5-icl-sft-peft-rlhf-8rx4znwnt8g9yjctbawwve.streamlit.app/",
   // "videoEmbedUrl": "https://www.youtube.com/embed/h-0aYdylfRY?autoplay=1&mute=1&loop=1",
@@ -87,7 +87,7 @@ export const projects: Project[] = [
     "Transformers",
     "MLOps"
   ],
-  "category": "NLP & Sequence Models",
+  "categories": ["Natural Language Processing", "Generative AI & LLMs"],
   "githubLink": "https://github.com/nabeelshan78/NLP-From-Scratch-to-Deployment",
   "liveDemoLink": "https://huggingface.co/spaces/nabeelshan/distilbert-agnews-classifier",
   "thumbnailUrl": "thumbnails/nlp_distilbert.png",
@@ -109,6 +109,68 @@ export const projects: Project[] = [
   "year": 2025
 },
 {
+  "id": "researchflow-multiagent",
+  "title": "ResearchFlow: Cyclical Multi-Agent Architecture",
+  "description": "Architected a production-grade, cyclical multi-agent system using **LangGraph** to autonomously research, validate, and synthesize business intelligence. Moving beyond simple linear wrappers, this project implements a stateful, fault-tolerant orchestration pipeline where four specialized agents collaborate via a strongly typed, shared state object. The system employs a dual-model compute strategy via **Groq**, routing deterministic tasks to **Llama-3.1-8b** while reserving the heavier **Llama-3.3-70b** for deep reasoning and dynamic **Tavily** web search.\n\nTo ensure robustness, the pipeline integrates a **Human-in-the-Loop (HITL)** interrupt mechanism for query disambiguation and strictly validates all state transitions using Pydantic. By enforcing a strict cyclical validation loop with an independent critic agent, the system continuously re-executes targeted searches until a minimum **6.0 confidence threshold** is achieved, establishing a highly reliable, self-correcting agentic workflow.",
+  "techStack": [
+    "LangGraph",
+    "Llama-3",
+    "Web Search"
+  ],
+  "categories": ["RAG & Agentic AI"],
+  "githubLink": "https://github.com/nabeelshan78/researchflow-multiagent-research-assistant",
+  "liveDemoLink": "",
+  "thumbnailUrl": "thumbnails/multi_agent_research_thumbnail.png",
+  "metrics": [
+    {
+      "label": "Architecture",
+      "value": "4-Agent"
+    },
+    {
+      "label": "Validation",
+      "value": "Self-Correcting"
+    },
+    {
+      "label": "Interrupts",
+      "value": "HITL"
+    }
+  ],
+  "featured": true,
+  "year": 2026
+},
+{
+  "id": "fasa-secure-rag-pipeline",
+  "title": "FASA: Secure Multi-Lingual RAG Engine",
+  "description": "Developed FASA (Fast AI SOP Assistant), a 100% secure, local Retrieval-Augmented Generation (RAG) system engineered for the highly-regulated Pharmaceutical industry. The platform allows enterprise users to query complex Standard Operating Procedures (SOPs) with exact page-level citations while guaranteeing zero external data leakage.\n\nArchitected a **Dockerized** microservices pipeline integrating a **FastAPI** backend, **React** frontend, and **Qdrant** vector database. Designed a smart ingestion engine leveraging **OCR** and PyMuPDF to process PDFs across five languages. The retrieval system utilizes **Nomic-Embed** dense representations coupled with sparse BM25 indexing for **hybrid search**, passing retrieved nodes through a cross-encoder **re-ranker** before synthesizing answers with a localized **Llama 3.1 8B** model.\n\nEngineered for regulatory compliance with strict Role-Based Access Control **(RBAC)**, **GMP** e-Signatures, and cryptographic **audit trails**. In rigorous formal evaluations, the custom hybrid-retrieval pipeline achieved a **96.0% QA accuracy** (48/50 validation tasks passed), effectively mitigating LLM hallucinations in mission-critical clinical workflows.",
+  "techStack": [
+    "FastAPI",
+    "LlamaIndex",
+    "Qdrant",
+    "Docker",
+    "React"
+  ],
+  "categories": ["RAG & Agentic AI"],
+  "githubLink": "https://github.com/nabeelshan78/pharma_sop_rag_fasa",
+  "liveDemoLink": "",
+  'thumbnailUrl': "thumbnails/fasa_architecture.png",
+  "metrics": [
+    {
+      "label": "QA Acc",
+      "value": "96.0%"
+    },
+    {
+      "label": "Retrieval",
+      "value": "Hybrid"
+    },
+    {
+      "label": "Privacy",
+      "value": "100% Local"
+    }
+  ],
+  "featured": true,
+  "year": 2026
+},
+{
   "id": "attention-based-nmt-from-scratch",
   "title": "Attention-Based NMT: Seq2Seq Architecture",
   // "description": "Designed a complete **Neural Machine Translation (NMT)** system from the ground up for English-to-French translation. Bypassing pre-trained models, this project demonstrates a fundamental mastery of sequence modeling by implementing the entire architecture completely from scratch.                    \n\nHighly customized **Sequence-to-Sequence (Seq2Seq)** model implemented in **TensorFlow**. The architecture features a **Bidirectional LSTM Encoder**, a mathematical **Additive Attention Mechanism** for dynamic sequence alignment, and a custom **LSTM Decoder**. The 23.6M parameter model was optimized using custom data pipelines and **Beam Search** decoding for high-fidelity inference.\n\nThe architecture successfully learned complex bilingual mappings, achieving exact-match accuracy on conversational phrases. The trained model was deployed as a web application.",
@@ -118,7 +180,7 @@ export const projects: Project[] = [
     "Bi-LSTM",
     "Additive Attention"
   ],
-  "category": "NLP & Sequence Models",
+  "categories": ["Natural Language Processing"],
   "githubLink": "https://github.com/nabeelshan78/real-time-neural-machine-translation",
   "liveDemoLink": "https://attention-based-nmt-rwlnsz6dvpdacpyj4gqob2.streamlit.app/",
   "thumbnailUrl": "thumbnails/encoder_decoder_attention_diagram.png",
@@ -145,7 +207,7 @@ export const projects: Project[] = [
     "CNNs",
     "Computer Vision"
   ],
-  "category": "Computer Vision",
+  "categories": ["Computer Vision"],
   "githubLink": "https://github.com/nabeelshan78/mobilenetv2-finetune-classification",
   "liveDemoLink": "",
   "thumbnailUrl": "thumbnails/mobilenet_v2.png",
@@ -175,7 +237,7 @@ export const projects: Project[] = [
     "YOLOv2",
     "Computer Vision",
   ],
-  "category": "Computer Vision",
+  "categories": ["Computer Vision"],
   "githubLink": "https://github.com/nabeelshan78/yolo-object-detection-pipeline",
   "liveDemoLink": "",
   "thumbnailUrl": "thumbnails/yolo_cars_pred.png",
@@ -187,96 +249,7 @@ export const projects: Project[] = [
   ],
   "featured": true,
   "year": 2025
-},
-  {
-    id: 'wake-word',
-    title: 'Real-Time Wake Word Detection',
-    description: 'Audio signal processing and classification system utilizing Conv1D and Stacked GRU architectures. Trained on synthesized datasets with robust data augmentation for noisy environments.',
-    techStack: ['Python', 'TensorFlow', 'Audio Processing', 'GRU', 'Conv1D'],
-    category: 'First-Principles',
-    githubLink: 'https://github.com/nabeelshan78/keyword-spotting-engine',
-    thumbnailUrl: 'wake.png',
-    liveDemoLink: 'https://keyword-spotting-engine-dlydrlpjcyssh7yyjzemqd.streamlit.app/',
-    videoEmbedUrl: 'https://www.youtube.com/embed/l8yH4MuLMvM?autoplay=1&mute=1&loop=1&playlist=l8yH4MuLMvM',
-    year: 2024,
-  },
-  {
-    id: 'facenet',
-    title: 'FaceNet Biometric Verification',
-    description: 'Facial recognition system utilizing FaceNet. Implements L2 distance calculations on 128D embedding vectors for verification and threshold-based identification against a reference database.',
-    techStack: ['Python', 'TensorFlow', 'Computer Vision', 'FaceNet', 'Biometrics'],
-    category: 'Computer Vision',
-    githubLink: 'https://github.com/nabeelshan78/facenet-face-recognition',
-    thumbnailUrl: 'face.png',
-    videoEmbedUrl: 'https://www.youtube.com/embed/thC_cF0a7mQ?autoplay=1&mute=1&loop=1&playlist=thC_cF0a7mQ',
-    year: 2024,
-  },
-  {
-    id: 'unet-segmentation',
-    title: 'U-Net Semantic Segmentation',
-    description: 'Semantic segmentation architecture implemented from scratch in TensorFlow. Evaluated on CARLA simulator data for pixel-level road classification, achieving 0.908 Mean IoU.',
-    techStack: ['Python', 'TensorFlow', 'Computer Vision', 'U-Net', 'Semantic Segmentation'],
-    category: 'First-Principles',
-    githubLink: 'https://github.com/nabeelshan78/pixelsense-ai-segmentation',
-    thumbnailUrl: 'carla_road_seg.png',
-    liveDemoLink: 'https://pixelsense-ai-segmentation-n9srxvnie8tcsusmr2eq3x.streamlit.app/',
-    videoEmbedUrl: 'https://www.youtube.com/embed/4Flr944fW50?autoplay=1&mute=1&loop=1&playlist=4Flr944fW50',
-    metrics: [
-      { label: 'Val mIoU', value: '0.908' },
-      { label: 'Val Acc', value: '98.37%' },
-    ],
-    year: 2024,
-  },
-  {
-    id: 'debiasing-embeddings',
-    title: 'GloVe Embedding Debiasing Algorithms',
-    description: 'Implementation of neutralization and equalization algorithms to mitigate gender bias in GloVe vector spaces. Includes quantitative bias detection and fairness evaluation metrics.',
-    techStack: ['Python', 'NumPy', 'NLP', 'Word Embeddings', 'GloVe', 'Fairness'],
-    category: 'LLM Alignment & RLHF',
-    githubLink: 'https://github.com/nabeelshan78/debiasing-word-embeddings',
-    thumbnailUrl: 'debias.png',
-    year: 2024,
-  },
-  {
-    id: 'resnet50',
-    title: 'ResNet-50 Implementation',
-    description: 'Reconstruction of the ResNet-50 architecture in TensorFlow without utilizing pre-trained weights. Implements convolutional and identity blocks to evaluate residual learning on CIFAR-10.',
-    techStack: ['Python', 'TensorFlow', 'Computer Vision', 'CNN', 'ResNet'],
-    category: 'First-Principles',
-    githubLink: 'https://github.com/nabeelshan78/resnet50-from-scratch-cifar10',
-    thumbnailUrl: 'resnet.png',
-    year: 2024,
-  },
-  {
-    id: 'emojify',
-    title: 'Text-to-Emoji Classification',
-    description: 'Comparative analysis of emoji prediction using a baseline GloVe + Softmax model (NumPy) versus an LSTM architecture utilizing pre-trained GloVe embeddings (TensorFlow).',
-    techStack: ['Python', 'TensorFlow', 'NumPy', 'NLP', 'GloVe', 'LSTM'],
-    category: 'NLP & Sequence Models',
-    githubLink: 'https://github.com/nabeelshan78/emojify-nlp',
-    thumbnailUrl: 'emoji.png',
-    year: 2024,
-  },
-  {
-    id: 'date-translator',
-    title: 'Date Format Translation via Attention',
-    description: 'Seq2Seq model translating varied natural language dates into normalized YYYY-MM-DD formats. Architecture pairs a Bi-directional LSTM encoder with an attention-augmented LSTM decoder.',
-    techStack: ['Python', 'TensorFlow', 'NLP', 'Seq2Seq', 'Attention Mechanism'],
-    category: 'First-Principles',
-    githubLink: 'https://github.com/nabeelshan78/attention-date-translator',
-    thumbnailUrl: 'atten_date.png',
-    year: 2024,
-  },
-  {
-    id: 'neural-style-transfer',
-    title: 'Neural Style Transfer Optimization',
-    description: 'NST pipeline utilizing VGG19 feature extraction. Implements custom content and style loss formulations using tf.GradientTape for gradient descent optimization directly on image pixels.',
-    techStack: ['Python', 'TensorFlow', 'Computer Vision', 'NST', 'VGG19'],
-    category: 'Computer Vision',
-    githubLink: 'https://github.com/nabeelshan78/neural-style-transfer-tf',
-    thumbnailUrl: 'style.png',
-    year: 2024,
-  }
+}
 ];
 
-export const allCategories: ProjectCategory[] = ['LLM Alignment & RLHF', 'First-Principles', 'NLP & Sequence Models', 'Computer Vision', 'Applied ML'];
+export const allCategories: ProjectCategory[] = ['Generative AI & LLMs', 'RAG & Agentic AI', 'Natural Language Processing', 'Computer Vision'];

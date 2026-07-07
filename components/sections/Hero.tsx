@@ -34,15 +34,14 @@ const Hero = () => {
               Nabeel Shan
             </h1>
 
-            <p style={{
+                        <p style={{
               fontSize: 'var(--text-base)',
               color: 'var(--text-secondary)',
               lineHeight: 1.75,
               marginBottom: '2.5rem',
               maxWidth: '520px',
             }}>
-              Focused on large language model alignment, reinforcement learning from human feedback, and agentic AI systems.
-              Building and verifying deep learning architectures from first principles using PyTorch and NumPy.
+              I research and engineer Large Language Models with a core focus on <strong>alignment methodologies, computational efficiency, test-time compute,</strong> and <strong>agentic systems</strong>. Driven by a strict first-principles philosophy, I build and formally verify deep learning architectures from the ground up using <strong>PyTorch</strong> and core <strong>tensor mathematics</strong>.
             </p>
 
             {/* Affiliation Line */}
@@ -55,10 +54,10 @@ const Hero = () => {
               borderLeft: '1px solid var(--border-default)',
             }}>
               <span style={{ fontSize: 'var(--text-sm)', color: 'var(--text-secondary)' }}>
-                B.E. Software Engineering — <span style={{ color: 'var(--text-primary)' }}>NUST</span>, Islamabad
+                B.E. Software Engineering • <span style={{ color: 'var(--text-primary)' }}>NUST</span>, Islamabad
               </span>
               <span style={{ fontSize: 'var(--text-sm)', color: 'var(--text-secondary)' }}>
-                Incoming MITACS Globalink Research Intern — <span style={{ color: 'var(--text-primary)' }}>University of Calgary</span>
+                Incoming MITACS Globalink Research Intern • <span style={{ color: 'var(--text-primary)' }}>University of Calgary</span>
               </span>
             </div>
 

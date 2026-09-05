@@ -111,7 +111,7 @@ export const projects: Project[] = [
 {
   "id": "researchflow-multiagent",
   "title": "ResearchFlow: Cyclical Multi-Agent Architecture",
-  "description": "Architected a production-grade, cyclical multi-agent system using **LangGraph** to autonomously research, validate, and synthesize business intelligence. Moving beyond simple linear wrappers, this project implements a stateful, fault-tolerant orchestration pipeline where four specialized agents collaborate via a strongly typed, shared state object. The system employs a dual-model compute strategy via **Groq**, routing deterministic tasks to **Llama-3.1-8b** while reserving the heavier **Llama-3.3-70b** for deep reasoning and dynamic **Tavily** web search.\n\nTo ensure robustness, the pipeline integrates a **Human-in-the-Loop (HITL)** interrupt mechanism for query disambiguation and strictly validates all state transitions using Pydantic. By enforcing a strict cyclical validation loop with an independent critic agent, the system continuously re-executes targeted searches until a minimum **6.0 confidence threshold** is achieved, establishing a highly reliable, self-correcting agentic workflow.",
+  "description": "Architected a production-grade, cyclical 4-agent system (Clarity, Research, Validator, Synthesis) using **LangGraph** for autonomous multi-step research synthesis. Moving beyond simple linear wrappers, this project implements a stateful, fault-tolerant orchestration pipeline where specialized agents collaborate via a strongly typed, shared state object. The system cuts inference costs via a dual-model compute strategy via **Groq**, routing deterministic classification tasks to a fast LLM (**Llama-3.1-8b**) while reserving a reasoning LLM (**Llama-3.3-70b**) for deep research and synthesis.\n\nTo ensure robustness, the pipeline integrates a checkpointed state enabling a **Human-in-the-Loop (HITL)** interrupt/resume mechanism, and reliably routes data with Pydantic-enforced structured outputs. By designing a strict self-correcting validation loop, the system continuously re-runs **Tavily**-powered web research until a confidence threshold is met, establishing a highly reliable agentic workflow.",
   "techStack": [
     "LangGraph",
     "Llama-3",
@@ -245,6 +245,37 @@ export const projects: Project[] = [
     {
       "label": "Algorithm",
       "value": "Custom NMS"
+    }
+  ],
+  "featured": true,
+  "year": 2025
+},
+{
+  "id": "pixelsense-unet-segmentation",
+  "title": "PixelSense: U-Net Semantic Segmentation from Scratch",
+  "description": "Designed and trained a **U-Net** encoder-decoder entirely from scratch, with no pretrained backbone, for 23-class pixel-level road-scene segmentation. The architecture uses skip-connection feature fusion to combine deep semantic context with high-resolution spatial detail, **He-normal** initialization, and staged **dropout** regularization.\n\nTraining was driven by a custom **Mean IoU** metric with checkpoint-on-IoU selection and early stopping, and the final model is deployed as an interactive real-time inference application.",
+  "techStack": [
+    "TensorFlow/Keras",
+    "U-Net",
+    "Streamlit",
+    "Computer Vision"
+  ],
+  "categories": ["Computer Vision"],
+  "githubLink": "https://github.com/nabeelshan78/pixelsense-ai-segmentation",
+  "liveDemoLink": "https://pixelsense-ai-segmentation-n9srxvnie8tcsusmr2eq3x.streamlit.app/",
+  "thumbnailUrl": "carseg_banner.png",
+  "metrics": [
+    {
+      "label": "Val mIoU",
+      "value": "0.908"
+    },
+    {
+      "label": "Pixel Accuracy",
+      "value": "98.4%"
+    },
+    {
+      "label": "Classes",
+      "value": "23"
     }
   ],
   "featured": true,

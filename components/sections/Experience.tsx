@@ -12,13 +12,13 @@ const Experience = () => {
           <div className="timeline-item">
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '0.375rem' }}>
               <h3 style={{ fontSize: 'var(--text-md)', margin: 0, color: 'var(--text-heading)' }}>MITACS Globalink Research Intern</h3>
-              <span className="text-mono" style={{ fontSize: 'var(--text-xs)', color: 'var(--text-tertiary)' }}>Summer 2026</span>
+              <span className="text-mono" style={{ fontSize: 'var(--text-xs)', color: 'var(--text-tertiary)' }}>Jul 2026 – Present</span>
             </div>
             <p style={{ fontWeight: 500, color: 'var(--text-primary)', marginBottom: '0.5rem', fontSize: 'var(--text-sm)' }}>
               University of Calgary <span style={{ color: 'var(--text-tertiary)', fontWeight: 400 }}>• Alberta, Canada</span>
             </p>
             <p style={{ color: 'var(--text-secondary)', fontSize: 'var(--text-sm)', lineHeight: 1.7 }}>
-              Selected for a <strong>fully-funded</strong> research internship to architect synthetic data pipelines using <strong>Bayesian Networks</strong> and fine-tune open-source <strong>LLMs</strong> (LLaMA, Mistral) via <strong>LoRA</strong> and <strong>Knowledge Distillation</strong>. The project focuses on integrating these specialized models into a <strong>multi-agent system</strong> to automate complex construction risk management and Job Safety Analysis (JSA).
+              Currently completing a <strong>fully-funded</strong> research internship, architecting parallel <strong>VLM adaptation pipelines</strong> over <strong>Qwen3-VL</strong> via two-phase <strong>LoRA</strong> SFT and <strong>GRPO</strong>. Designing multi-component reward schemas and hardening the stack for a <strong>multi-agent</strong> system powering real-time hazard assistance.
             </p>
           </div>
 
@@ -26,13 +26,13 @@ const Experience = () => {
           <div className="timeline-item">
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '0.375rem' }}>
               <h3 style={{ fontSize: 'var(--text-md)', margin: 0, color: 'var(--text-heading)' }}>AI Engineer (Contract)</h3>
-              <span className="text-mono" style={{ fontSize: 'var(--text-xs)', color: 'var(--text-tertiary)' }}>Oct 2025 – Dec 2025</span>
+              <span className="text-mono" style={{ fontSize: 'var(--text-xs)', color: 'var(--text-tertiary)' }}>Nov 2025 – Jan 2026</span>
             </div>
             <p style={{ fontWeight: 500, color: 'var(--text-primary)', marginBottom: '0.5rem', fontSize: 'var(--text-sm)' }}>
               DeepDocs AI <span style={{ color: 'var(--text-tertiary)', fontWeight: 400 }}>• Remote, France</span>
             </p>
             <p style={{ color: 'var(--text-secondary)', fontSize: 'var(--text-sm)', lineHeight: 1.7 }}>
-              Architected an autonomous agentic pipeline using <strong>LangChain</strong> to automate clinical literature reviews. Engineered a deterministic verification engine achieving <strong>&gt;95% citation accuracy</strong>, deploying programmatic guardrails to strictly mitigate LLM hallucinations in production environments.
+              Architected an autonomous agentic pipeline using <strong>LangChain</strong> to automate clinical literature reviews. Engineered a deterministic verification engine achieving <strong>&gt;98% citation accuracy</strong>, deploying programmatic guardrails to strictly mitigate LLM hallucinations in production environments.
             </p>
           </div>
 

@@ -41,7 +41,7 @@ const Hero = () => {
               marginBottom: '2.5rem',
               maxWidth: '520px',
             }}>
-              I research and engineer Large Language Models with a core focus on <strong>alignment methodologies, computational efficiency, test-time compute,</strong> and <strong>agentic systems</strong>. Driven by a strict first-principles philosophy, I build and formally verify deep learning architectures from the ground up using <strong>PyTorch</strong> and core <strong>tensor mathematics</strong>.
+              I work across applied and theoretical machine learning — vision-language models, multi-agent systems, efficient model adaptation, and alignment — with a focus on building reliable AI for real-world and safety-critical domains. I build and verify deep learning architectures from first principles in <strong>PyTorch</strong> and raw <strong>tensor mathematics</strong>.
             </p>
 
             {/* Affiliation Line */}
@@ -57,7 +57,7 @@ const Hero = () => {
                 B.E. Software Engineering • <span style={{ color: 'var(--text-primary)' }}>NUST</span>, Islamabad
               </span>
               <span style={{ fontSize: 'var(--text-sm)', color: 'var(--text-secondary)' }}>
-                Incoming MITACS Globalink Research Intern • <span style={{ color: 'var(--text-primary)' }}>University of Calgary</span>
+                Current MITACS Globalink Research Intern • <span style={{ color: 'var(--text-primary)' }}>University of Calgary</span>
               </span>
             </div>
 
@@ -65,6 +65,7 @@ const Hero = () => {
             <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
               <a href="#projects" className="btn btn-filled">View Projects</a>
               <a href="#contact" className="btn">Contact</a>
+              {/* CV button — hidden; uncomment to restore
               <a
                 href="/NabeelShan_Resume.pdf"
                 target="_blank"
@@ -79,6 +80,7 @@ const Hero = () => {
                 </svg>
                 CV
               </a>
+              */}
             </div>
 
             {/* Social Links */}

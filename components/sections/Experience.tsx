@@ -39,7 +39,7 @@ const Experience = () => {
           {/* CETQAP Internship */}
           <div className="timeline-item">
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '0.375rem' }}>
-              <h3 style={{ fontSize: 'var(--text-md)', margin: 0, color: 'var(--text-heading)' }}>AI Research Intern</h3>
+              <h3 style={{ fontSize: 'var(--text-md)', margin: 0, color: 'var(--text-heading)' }}>Quantum-AI Research Intern</h3>
               <span className="text-mono" style={{ fontSize: 'var(--text-xs)', color: 'var(--text-tertiary)' }}>Jun 2025 – Aug 2025</span>
             </div>
             <p style={{ fontWeight: 500, color: 'var(--text-primary)', marginBottom: '0.5rem', fontSize: 'var(--text-sm)' }}>

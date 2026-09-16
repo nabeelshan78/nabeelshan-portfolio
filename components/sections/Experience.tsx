@@ -18,7 +18,7 @@ const Experience = () => {
               University of Calgary <span style={{ color: 'var(--text-tertiary)', fontWeight: 400 }}>• Alberta, Canada</span>
             </p>
             <p style={{ color: 'var(--text-secondary)', fontSize: 'var(--text-sm)', lineHeight: 1.7 }}>
-              Currently completing a <strong>fully-funded</strong> research internship, architecting parallel <strong>VLM adaptation pipelines</strong> over <strong>Qwen3-VL</strong> via two-phase <strong>LoRA</strong> SFT and <strong>GRPO</strong>. Designing multi-component reward schemas and hardening the stack for a <strong>multi-agent</strong> system powering real-time hazard assistance.
+              Currently completing a fully-funded research internship, architecting four parallel VLM adaptation pipelines over Qwen3-VL at 2B, 4B and 8B via two-phase LoRA SFT then GRPO against code-computed rewards. Designing the reward schemas, and measuring accuracy against latency and cost across the three scales to find where capability stops paying for inference.
             </p>
           </div>
 

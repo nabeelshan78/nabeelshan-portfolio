@@ -41,7 +41,7 @@ const Hero = () => {
               marginBottom: '2.5rem',
               maxWidth: '520px',
             }}>
-              I work on reinforcement learning for large language and vision-language models — post-training with verifiable rewards, reward design, efficient adaptation, and the agentic systems built on top of them — so that experiments stay affordable across model scales. I'm also interested in the failures that never raise an error: reward hacking, hallucination, silent capability loss. I build and verify architectures from first principles before reaching for abstractions.
+              I work on reinforcement learning for large language and vision-language models - post-training with verifiable rewards, and the efficient adaptation and inference, along with the agentic systems built on top. I'm also interested in the failures that never raise an error: reward hacking, hallucination, silent capability loss. I build and verify architectures from first principles before reaching for abstractions.
             </p>
 
             {/* Affiliation Line */}

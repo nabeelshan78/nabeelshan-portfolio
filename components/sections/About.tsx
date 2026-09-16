@@ -13,18 +13,18 @@ const About = () => {
           <div>
             {/* Paragraph 1: Position */}
             <p style={{ color: 'var(--text-secondary)', marginBottom: '1rem', lineHeight: 1.8 }}>
-              My work sits where reinforcement learning meets large language and vision-language models: post-training with verifiable rewards, reward specification that holds up under optimization pressure, and efficient adaptation / inference — LoRA, adapters, quantization, distillation — so that experiments stay affordable at more than one model scale. What draws me in particular are the failure modes that never raise an error. A model can be reward-hacking, hallucinating, or quietly losing a capability while every number on the dashboard looks fine.
+              My work sits where reinforcement learning meets large language and vision-language models: post-training against rewards that hold up under optimization pressure, and efficient adaptation and inference - LoRA, adapters, quantization, distillation - so that the same experiment can be run at more than one model scale instead of one. What draws me in particular are the failure modes that never raise an error. A model can be reward-hacking, hallucinating, or quietly losing a capability while every number on the dashboard looks fine.
             </p>
 
             {/* Paragraph 2: Method */}
             <p style={{ color: 'var(--text-secondary)', marginBottom: '1rem', lineHeight: 1.8 }}>
-              Rather than relying on high-level APIs, my engineering philosophy is rooted in first principles: I build and validate architectures from scratch — Transformers, CNNs, RNNs, PEFT modules and complete RLHF pipelines — in PyTorch and raw NumPy. I treat implementation not as a coding exercise but as the most effective way to internalise the mathematics behind the literature.
+              Rather than relying on high-level APIs, my engineering philosophy is rooted in first principles: I build and validate architectures from scratch - Transformers, CNNs, RNNs, PEFT modules and complete RLHF pipelines - in PyTorch and raw NumPy. I treat implementation not as a coding exercise but as the most effective way to internalise the mathematics behind the literature.
             </p>
 
-            {/* Paragraph 3: Standard of proof */}
+            {/* Paragraph 3: Standard of proof
             <p style={{ color: 'var(--text-secondary)', marginBottom: '1rem', lineHeight: 1.8 }}>
               I hold evaluation to the same standard, which in practice means building the checking apparatus alongside the model. A reward function gets a validator that scores honest against degenerate policies and fails the build if the degenerate one wins. A generative pipeline gets a deterministic, non-neural layer that matches every claim back to source. A Transformer gets its masks, parameter count and weight tying verified before a single training step. I would rather build a system that can be checked than one I am asked to trust.
-            </p>
+            </p> */}
 
             {/* Paragraph 4: Current work */}
             <p style={{ color: 'var(--text-secondary)', marginBottom: '1rem', lineHeight: 1.8 }}>
@@ -33,7 +33,7 @@ const About = () => {
 
             {/* Paragraph 5: The ask */}
             <p style={{ color: 'var(--text-secondary)', lineHeight: 1.8 }}>
-              I am applying for thesis-based Master's positions starting <strong>Fall 2027</strong>, looking for a group where I can work on reinforcement learning for large multimodal models, post-training, reward design, reasoning, efficient adaptation — and on the evaluation that keeps those systems honest.
+              I am applying for thesis-based Master's positions starting <strong>Fall 2027</strong>, looking for a group where I can work on reinforcement learning for large multimodal models, post-training, reward design, reasoning, efficient adaptation - and on the evaluation that keeps those systems honest.
             </p>
           </div>
         </div>

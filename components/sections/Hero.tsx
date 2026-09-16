@@ -41,7 +41,7 @@ const Hero = () => {
               marginBottom: '2.5rem',
               maxWidth: '520px',
             }}>
-              I work across applied and theoretical machine learning — vision-language models, multi-agent systems, efficient model adaptation, and alignment — with a focus on building reliable AI for real-world and safety-critical domains. I build and verify deep learning architectures from first principles in <strong>PyTorch</strong> and raw <strong>tensor mathematics</strong>.
+              I work on reinforcement learning for large language and vision-language models — post-training with verifiable rewards, reward design, efficient adaptation, and the agentic systems built on top of them — so that experiments stay affordable across model scales. I'm also interested in the failures that never raise an error: reward hacking, hallucination, silent capability loss. I build and verify architectures from first principles before reaching for abstractions.
             </p>
 
             {/* Affiliation Line */}

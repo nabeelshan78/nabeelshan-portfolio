@@ -12,7 +12,7 @@ const Experience = () => {
           <div className="timeline-item">
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '0.375rem' }}>
               <h3 style={{ fontSize: 'var(--text-md)', margin: 0, color: 'var(--text-heading)' }}>MITACS Globalink Research Intern</h3>
-              <span className="text-mono" style={{ fontSize: 'var(--text-xs)', color: 'var(--text-tertiary)' }}>Jul 2026 – Present</span>
+              <span className="text-mono" style={{ fontSize: 'var(--text-xs)', color: 'var(--text-tertiary)' }}>Jul 2026 – Oct 2026</span>
             </div>
             <p style={{ fontWeight: 500, color: 'var(--text-primary)', marginBottom: '0.5rem', fontSize: 'var(--text-sm)' }}>
               University of Calgary <span style={{ color: 'var(--text-tertiary)', fontWeight: 400 }}>• Alberta, Canada</span>

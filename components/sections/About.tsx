@@ -11,19 +11,29 @@ const About = () => {
 
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '2.5rem', marginBottom: '3.5rem' }}>
           <div>
-            {/* Paragraph 1: Research & Philosophy */}
+            {/* Paragraph 1: Position */}
             <p style={{ color: 'var(--text-secondary)', marginBottom: '1rem', lineHeight: 1.8 }}>
-              My work spans both applied and theoretical machine learning. I am interested in how modern deep learning systems can be made efficient, reliable, and verifiable enough to deploy in real-world and safety-critical domains — across vision-language models, multi-agent architectures, retrieval-grounded generation, and reinforcement learning from preferences. Rather than relying on high-level APIs, my engineering philosophy is rooted in first principles: I build and validate architectures from scratch — Transformers, CNNs, RNNs, PEFT modules, and complete RLHF pipelines — in PyTorch and raw NumPy. I treat implementation not as a coding exercise but as the most effective way to internalize the mathematics behind the literature.
-            </p>
-            
-            {/* Paragraph 2: Current Position */}
-            <p style={{ color: 'var(--text-secondary)', marginBottom: '1rem', lineHeight: 1.8 }}>
-              I am currently pursuing a B.E. in Software Engineering at the National University of Sciences and Technology (NUST), Islamabad, alongside a fully-funded MITACS Globalink Research Internship at the University of Calgary. There I architect parallel vision-language model adaptation pipelines over Qwen3-VL using two-phase LoRA SFT and GRPO, design multi-component reward functions, and build the evaluation infrastructure for a multi-agent system powering real-time hazard assistance in construction environments.
+              My work sits where reinforcement learning meets large language and vision-language models: post-training with verifiable rewards, reward specification that holds up under optimization pressure, and efficient adaptation / inference — LoRA, adapters, quantization, distillation — so that experiments stay affordable at more than one model scale. What draws me in particular are the failure modes that never raise an error. A model can be reward-hacking, hallucinating, or quietly losing a capability while every number on the dashboard looks fine.
             </p>
 
-            {/* Paragraph 3: Ambition */}
+            {/* Paragraph 2: Method */}
+            <p style={{ color: 'var(--text-secondary)', marginBottom: '1rem', lineHeight: 1.8 }}>
+              Rather than relying on high-level APIs, my engineering philosophy is rooted in first principles: I build and validate architectures from scratch — Transformers, CNNs, RNNs, PEFT modules and complete RLHF pipelines — in PyTorch and raw NumPy. I treat implementation not as a coding exercise but as the most effective way to internalise the mathematics behind the literature.
+            </p>
+
+            {/* Paragraph 3: Standard of proof */}
+            <p style={{ color: 'var(--text-secondary)', marginBottom: '1rem', lineHeight: 1.8 }}>
+              I hold evaluation to the same standard, which in practice means building the checking apparatus alongside the model. A reward function gets a validator that scores honest against degenerate policies and fails the build if the degenerate one wins. A generative pipeline gets a deterministic, non-neural layer that matches every claim back to source. A Transformer gets its masks, parameter count and weight tying verified before a single training step. I would rather build a system that can be checked than one I am asked to trust.
+            </p>
+
+            {/* Paragraph 4: Current work */}
+            <p style={{ color: 'var(--text-secondary)', marginBottom: '1rem', lineHeight: 1.8 }}>
+              I am currently pursuing a B.E. in Software Engineering at NUST, Islamabad, alongside a fully funded MITACS Globalink Research Internship at the University of Calgary, where I architect parallel vision-language adaptation pipelines over Qwen3-VL using two-phase LoRA SFT and GRPO, design multi-component reward functions, and build the evaluation infrastructure for a multi-agent system powering real-time hazard assistance in construction.
+            </p>
+
+            {/* Paragraph 5: The ask */}
             <p style={{ color: 'var(--text-secondary)', lineHeight: 1.8 }}>
-              I am preparing to begin a thesis-based Master's program in Computer Science or Artificial Intelligence for <strong>Fall 2027</strong>, and I am actively seeking graduate research positions where I can contribute to work on efficient, trustworthy, and multimodal AI systems.
+              I am applying for thesis-based Master's positions starting <strong>Fall 2027</strong>, looking for a group where I can work on reinforcement learning for large multimodal models, post-training, reward design, reasoning, efficient adaptation — and on the evaluation that keeps those systems honest.
             </p>
           </div>
         </div>
@@ -79,10 +89,10 @@ const About = () => {
 
           <div className="card">
             <h4 style={{ fontSize: 'var(--text-sm)', marginBottom: '0.75rem', color: 'var(--text-primary)', fontWeight: 500 }}>
-              Languages &amp; Frameworks
+              Alignment &amp; Reinforcement Learning
             </h4>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.375rem' }}>
-              {['Python', 'C++', 'SQL', 'Bash', 'PyTorch', 'TensorFlow/Keras', 'NumPy', 'Hugging Face', 'LangChain', 'LangGraph', 'Scikit-learn'].map(s => (
+              {['RLHF', 'PPO', 'GRPO', 'DPO', 'Reward Modeling', 'KL-Regularized Optimization', 'GRPO with Verifiable Rewards', 'Reward Function Design', 'Reward-Hacking Analysis'].map(s => (
                 <span key={s} className="tag">{s}</span>
               ))}
             </div>
@@ -90,7 +100,7 @@ const About = () => {
 
           <div className="card">
             <h4 style={{ fontSize: 'var(--text-sm)', marginBottom: '0.75rem', color: 'var(--text-primary)', fontWeight: 500 }}>
-              LLMs &amp; NLP
+              Efficient Adaptation &amp; Inference
             </h4>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.375rem' }}>
               {['Transformers', 'PEFT/LoRA', 'QLoRA', 'SFT', 'Knowledge Distillation', 'Tokenization (BPE)', 'RAG'].map(s => (
@@ -101,10 +111,10 @@ const About = () => {
 
           <div className="card">
             <h4 style={{ fontSize: 'var(--text-sm)', marginBottom: '0.75rem', color: 'var(--text-primary)', fontWeight: 500 }}>
-              Alignment &amp; Reinforcement Learning
+              Languages &amp; Frameworks
             </h4>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.375rem' }}>
-              {['RLHF', 'PPO', 'GRPO', 'DPO', 'Reward Modeling', 'KL-Regularized Optimization'].map(s => (
+              {['Python', 'C++', 'SQL', 'Bash', 'PyTorch', 'TensorFlow/Keras', 'NumPy', 'Hugging Face', 'LangChain', 'LangGraph', 'Scikit-learn'].map(s => (
                 <span key={s} className="tag">{s}</span>
               ))}
             </div>

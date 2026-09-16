@@ -75,6 +75,10 @@ const CertModal = ({ cert, onClose }: { cert: Certificate; onClose: () => void }
 
 const Certifications = () => {
   const [selectedCert, setSelectedCert] = useState<Certificate | null>(null);
+  const [expanded, setExpanded] = useState(false);
+
+  // Show first 3 by default, rest behind toggle
+  const visible = expanded ? certificates : certificates.slice(0, 3);
 
   return (
     <section className="section" id="certifications">
@@ -83,38 +87,67 @@ const Certifications = () => {
         <span className="section-label">Credentials</span>
         <h2 className="section-title">Certifications</h2>
 
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
-          gap: '1rem',
-        }}>
-          {certificates.map((cert) => (
-            <div key={cert.id} className="card" style={{ display: 'flex', flexDirection: 'column' }}>
-              <h3 style={{ fontSize: 'var(--text-sm)', marginBottom: '0.375rem', color: 'var(--text-heading)', fontWeight: 600, lineHeight: 1.4 }}>
-                {cert.title}
-              </h3>
-              <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-primary)', marginBottom: '0.25rem', fontWeight: 500 }}>
-                {cert.issuer}
-              </p>
-              <p className="text-mono" style={{ fontSize: '0.6875rem', color: 'var(--text-tertiary)', marginBottom: '0.75rem' }}>
-                {cert.date}
-              </p>
+        {/* Compact single-row list */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+          {visible.map((cert) => (
+            <div
+              key={cert.id}
+              className="card"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                gap: '1rem',
+                padding: '0.75rem 1rem',
+                flexWrap: 'wrap',
+              }}
+            >
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.125rem', minWidth: 0, flex: 1 }}>
+                <span style={{ fontSize: 'var(--text-sm)', fontWeight: 600, color: 'var(--text-heading)', lineHeight: 1.4 }}>
+                  {cert.title}
+                </span>
+                <span style={{ fontSize: 'var(--text-xs)', color: 'var(--text-secondary)' }}>
+                  {cert.issuer}
+                </span>
+              </div>
 
-              <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-secondary)', lineHeight: 1.65, marginBottom: '1rem', flex: 1 }}>
-                {cert.description.slice(0, 120)}...
-              </p>
-
-              <div style={{ display: 'flex', gap: '0.5rem', marginTop: 'auto' }}>
-                <button className="btn" onClick={() => setSelectedCert(cert)}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexShrink: 0 }}>
+                <span className="text-mono" style={{ fontSize: '0.6875rem', color: 'var(--text-tertiary)' }}>
+                  {cert.date}
+                </span>
+                <button
+                  className="btn"
+                  onClick={() => setSelectedCert(cert)}
+                  style={{ padding: '0.25rem 0.625rem', fontSize: 'var(--text-xs)' }}
+                >
                   Details
                 </button>
-                <a href={cert.url} target="_blank" rel="noopener noreferrer" className="btn">
+                <a
+                  href={cert.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn"
+                  style={{ padding: '0.25rem 0.625rem', fontSize: 'var(--text-xs)' }}
+                >
                   Verify
                 </a>
               </div>
             </div>
           ))}
         </div>
+
+        {certificates.length > 3 && (
+          <div style={{ textAlign: 'center', marginTop: '1rem' }}>
+            <button
+              className="btn"
+              onClick={() => setExpanded(!expanded)}
+              style={{ fontSize: 'var(--text-xs)' }}
+            >
+              {expanded ? 'Show Less' : `Show All ${certificates.length} Certifications`}
+            </button>
+          </div>
+        )}
+
       </div>
 
       <AnimatePresence>

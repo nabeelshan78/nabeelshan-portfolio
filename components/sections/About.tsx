@@ -21,10 +21,10 @@ const About = () => {
               Rather than relying on high-level APIs, my engineering philosophy is rooted in first principles: I build and validate architectures from scratch - Transformers, CNNs, RNNs, PEFT modules and complete RLHF pipelines - in PyTorch and raw NumPy. I treat implementation not as a coding exercise but as the most effective way to internalise the mathematics behind the literature.
             </p>
 
-            {/* Paragraph 3: Standard of proof
+            {/* Paragraph 3: Standard of proof */}
             <p style={{ color: 'var(--text-secondary)', marginBottom: '1rem', lineHeight: 1.8 }}>
               I hold evaluation to the same standard, which in practice means building the checking apparatus alongside the model. A reward function gets a validator that scores honest against degenerate policies and fails the build if the degenerate one wins. A generative pipeline gets a deterministic, non-neural layer that matches every claim back to source. A Transformer gets its masks, parameter count and weight tying verified before a single training step. I would rather build a system that can be checked than one I am asked to trust.
-            </p> */}
+            </p>
 
             {/* Paragraph 4: Current work */}
             <p style={{ color: 'var(--text-secondary)', marginBottom: '1rem', lineHeight: 1.8 }}>

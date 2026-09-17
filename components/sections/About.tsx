@@ -89,7 +89,7 @@ const About = () => {
 
           <div className="card">
             <h4 style={{ fontSize: 'var(--text-sm)', marginBottom: '0.75rem', color: 'var(--text-primary)', fontWeight: 500 }}>
-              Alignment &amp; Reinforcement Learning
+              Post-Training &amp; Reinforcement Learning
             </h4>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.375rem' }}>
               {['RLHF', 'PPO', 'GRPO', 'DPO', 'Reward Modeling', 'KL-Regularized Optimization', 'GRPO with Verifiable Rewards', 'Reward Function Design', 'Reward-Hacking Analysis'].map(s => (
@@ -133,10 +133,10 @@ const About = () => {
 
           <div className="card">
             <h4 style={{ fontSize: 'var(--text-sm)', marginBottom: '0.75rem', color: 'var(--text-primary)', fontWeight: 500 }}>
-              Agentic AI &amp; Retrieval
+              Agentic Systems &amp; Test-Time Compute
             </h4>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.375rem' }}>
-              {['Multi-Agent Orchestration', 'Tool Calling', 'Structured Outputs', 'Vector DBs (Qdrant, Weaviate)'].map(s => (
+              {['Multi-Agent Orchestration', 'Tool Calling', 'Chain-of-Thought Reasoning', 'Compute-Optimal Inference'].map(s => (
                 <span key={s} className="tag">{s}</span>
               ))}
             </div>
@@ -147,7 +147,7 @@ const About = () => {
               Infrastructure &amp; Tools
             </h4>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.375rem' }}>
-              {['Docker', 'AWS', 'SLURM / Multi-GPU Training', 'FastAPI', 'Git', 'Weights & Biases', 'Hugging Face Hub/Spaces', 'Linux'].map(s => (
+              {['Docker', 'AWS', 'SLURM', 'FastAPI', 'Git', 'Weights & Biases', 'Hugging Face', 'Linux'].map(s => (
                 <span key={s} className="tag">{s}</span>
               ))}
             </div>

@@ -13,7 +13,7 @@ const About = () => {
           <div>
             {/* Paragraph 1: Position */}
             <p style={{ color: 'var(--text-secondary)', marginBottom: '1rem', lineHeight: 1.8 }}>
-              My work sits where reinforcement learning meets large language and vision-language models: post-training against rewards that hold up under optimization pressure, and efficient adaptation and inference - LoRA, adapters, quantization, distillation - so that the same experiment can be run at more than one model scale instead of one. What draws me in particular are the failure modes that never raise an error. A model can be reward-hacking, hallucinating, or quietly losing a capability while every number on the dashboard looks fine.
+              My work sits where reinforcement learning meets large language and vision-language models, and most of it comes down to one question: where the compute goes. You can spend it after pretraining with reinforcement learning, save it with efficient adaptation and compression - low-rank methods, quantization, distillation - or spend it at inference, letting a model think longer, call a tool, or hand off to another agent. What draws me in particular are the failure modes that never raise an error. A model can be reward-hacking, hallucinating, or quietly losing a capability while every number on the dashboard looks fine.
             </p>
 
             {/* Paragraph 2: Method */}

@@ -38,10 +38,19 @@ const Hero = () => {
               fontSize: 'var(--text-base)',
               color: 'var(--text-secondary)',
               lineHeight: 1.75,
+              marginBottom: '0.5rem',
+              maxWidth: '520px',
+            }}>
+              I work on large language and vision-language models that reason better and cost less to run - reinforcement learning after pretraining, efficient adaptation and inference, and how much compute a model spends at test time. I'm equally interested in the evaluation that tells you whether any of it worked, because the failures that matter here rarely raise an error: reward hacking, hallucination, silent capability loss.
+            </p>
+            <p style={{
+              fontSize: 'var(--text-base)',
+              color: 'var(--text-secondary)',
+              lineHeight: 1.75,
               marginBottom: '2.5rem',
               maxWidth: '520px',
             }}>
-              I work on reinforcement learning for large language and vision-language models - post-training with verifiable rewards, and the efficient adaptation and inference that keeps it runnable across model scales rather than at one - along with the agentic systems built on top. I'm also interested in the failures that never raise an error: reward hacking, hallucination, silent capability loss. I build and verify architectures from first principles before reaching for abstractions.
+              I build and verify architectures from first principles before reaching for abstractions.
             </p>
 
             {/* Affiliation Line */}

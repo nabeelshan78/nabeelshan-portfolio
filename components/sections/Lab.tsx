@@ -17,7 +17,7 @@ const labProjects = [
   "title": "Transformer Adaptation Playbook",
   "description": "From-scratch implementation of parameter-efficient adaptation strategies for Transformer architectures. Includes custom bottleneck adapters, manual low-rank matrix decompositions (LoRA). Empirically validated against full fine-tuning baselines.",
   "framework": "PyTorch",
-  "params": ">96% Param Drop",
+  "params": "92% Fewer Params",
   "link": "https://github.com/nabeelshan78/Transformer-Adaptation-Playbook"
   },
   {
